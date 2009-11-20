@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+function contains {
+	target=$1; shift
+	for __pkg in $@; do
+		if [[ $__pkg = $target ]]; then
+			return 0
+		fi
+	done
+	return 1
+}
+
+function checkout_or_update {
+	local prj_pac="$1/$2"
+	local ok=0
+
+	while test $ok -eq 0; do
+		if osc status "$prj_pac" &>/dev/null; then
+			pushd "$prj_pac" &>/dev/null
+			osc status | awk '{print$2}' | xargs rm -f
+			osc up && ok=1
+			popd &>/dev/null
+		else
+			rm -rf "$prj_pac"
+			osc co -u "$prj_pac" && ok=1
+		fi
+	done
+}
+
+set -e
+
+project="$1"
+
+echo "Getting package list for $project..."
+PACKAGES="$(osc list "$project")"
+
+echo "Updating project checkout..."
+for package in $PACKAGES; do
+	echo "==> $package"
+	checkout_or_update "$project" "$package"
+done
+
+echo "Removing obsolete packages..."
+
+for package in $(find "$project" -maxdepth 1 -mindepth 1 -type d \
+	| cut -f2 -d\/ | grep -v .osc); do
+	if ! contains "$package" $PACKAGES; then
+		echo "==> $package"
+		test -d "$project/$package" && \
+			rm -rf -- "$project/$package"
+	fi
+done
+
+echo "Done."

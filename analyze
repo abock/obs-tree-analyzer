@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+project="${1%%/*}"
+dbfile="$project/tree.sqlite"
+selfdir="$(dirname $0)"
+
+set -e
+
+if ! test "$#" -eq 1; then
+	echo "Usage: $0 <obs-project>"
+	exit 1
+fi
+
+echo "Updating checkout of $project..."
+# "$selfdir/phases/osc-checkout-project" "$project"
+
+if ! test -d "$project" || ! test -d "$project/.osc"; then
+	echo "$project is not a valid OBS checkout"
+	exit 1
+fi
+
+echo "Creating sqlite database $dbfile..."
+rm -rf -- "$dbfile"
+sqlite3 "$dbfile" <<EOF
+create table spec_files (
+	spec_id integer primary key,
+	obs_project text not null,
+	obs_package text not null,
+	filename text not null,
+	name text not null,
+	version text,
+	has_changelog integer
+);
+
+create table patches (
+	patch_id integer primary key,
+	spec_id integer not null,
+	name text not null,
+	application_order integer not null default -1,
+	unreferenced integer not null default 1
+);
+EOF
+
+echo "Analyzing spec files of all packages..."
+for package in $(find "$project" -maxdepth 1 -mindepth 1 -type d \
+	| cut -f2 -d\/ | grep -v .osc); do
+	prj_pac="$project/$package"
+	for spec in $(find "$prj_pac" -maxdepth 1 -name \*.spec -type f); do
+		echo "==> $package"
+		"$selfdir/phases/analyze-spec-file" "$spec" "$dbfile" \
+			"$project" "$package"
+	done
+done
+
+echo "Done."
