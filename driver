@@ -1,0 +1,12 @@
+#!/usr/bin/env perl
+
+use OTA::Project;
+
+my $project = new Project;
+$project->Load ("../trees/Moblin:Factory");
+printf "[%s]\n", $project->Name;
+
+foreach (@{$project->Children}) {
+	printf "-> %s\n", $_->Name;
+}
+
