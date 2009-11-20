@@ -18,7 +18,7 @@ sub new {
 sub Load {
 	my ($self, $dirname) = @_;
 	my $xp = XML::XPath->new (filename => "$dirname/.osc/_packages");
-	$self->Name ($xp->findvalue ('/project/@name'));
+	$self->{_name} = $xp->findvalue ('/project/@name');
 	push @{$self->{_children}}, new Package ($_->getNodeValue)
 		foreach $xp->find ('/project/package/@name')->get_nodelist;
 }
