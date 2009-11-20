@@ -12,7 +12,7 @@ if ! test "$#" -eq 1; then
 fi
 
 echo "Updating checkout of $project..."
-# "$selfdir/phases/osc-checkout-project" "$project"
+"$selfdir/phases/osc-checkout-project" "$project"
 
 if ! test -d "$project" || ! test -d "$project/.osc"; then
 	echo "$project is not a valid OBS checkout"

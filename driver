@@ -3,10 +3,10 @@
 use OTA::Project;
 
 my $project = new Project;
-$project->Load ("../trees/Moblin:Factory");
+$project->Load ("trees/Moblin:Factory");
 printf "[%s]\n", $project->Name;
 
-foreach (@{$project->Children}) {
+foreach ($project->Children) {
 	printf "-> %s\n", $_->Name;
 }
 
