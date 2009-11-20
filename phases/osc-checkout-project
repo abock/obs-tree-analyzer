@@ -37,7 +37,7 @@ PACKAGES="$(osc list "$project")"
 echo "Updating project checkout..."
 for package in $PACKAGES; do
 	echo "==> $package"
-	checkout_or_update "$project" "$package"
+#	checkout_or_update "$project" "$package"
 done
 
 echo "Removing obsolete packages..."
@@ -50,5 +50,14 @@ for package in $(find "$project" -maxdepth 1 -mindepth 1 -type d \
 			rm -rf -- "$project/$package"
 	fi
 done
+
+echo "Generating project _packages file..."
+{
+echo "<project name=\"$(cat $project/.osc/_project)\">"
+for package in $PACKAGES; do
+	echo "  <package name=\"$(cat $project/$package/.osc/_package)\" state=\" \"/>"
+done
+echo "</project>"
+} > $project/.osc/_packages
 
 echo "Done."
