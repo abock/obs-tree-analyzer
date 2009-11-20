@@ -7,6 +7,9 @@ $project->Load ("trees/Moblin:Factory");
 printf "[%s]\n", $project->Name;
 
 foreach ($project->Children) {
-	printf "-> %s\n", $_->Name;
+	printf "%s\n", $_->Name;
+	foreach ($_->Children) {
+		printf "  + %s\n", $_->Name;
+	}
 }
 

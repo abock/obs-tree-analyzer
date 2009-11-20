@@ -9,7 +9,6 @@ sub new {
 		_name => undef,
 		_children => undef
 	};
-	$self->{_children} = ();
 	bless $self, $class;
 	return $self;
 }
@@ -21,7 +20,7 @@ sub Name {
 
 sub Children {
 	my ($self) = @_;
-	return @{$self->{_children}};
+	return @{$self->{_children}} if $self->{_children};
 }
 
 1;
