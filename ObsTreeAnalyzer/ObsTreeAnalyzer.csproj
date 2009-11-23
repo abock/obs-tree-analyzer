@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{06116FBD-7C63-428F-9CA7-FB5726986AA7}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ObsTreeAnalyzer</RootNamespace>
+    <AssemblyName>ObsTreeAnalyzer</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+    <Commandlineparameters>/home/aaron/src/obs-tree-analyzer/trees/Moblin:Factory</Commandlineparameters>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="ObsTreeAnalyzer\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ObsTreeAnalyzer\Node.cs" />
+    <Compile Include="ObsTreeAnalyzer\Entry.cs" />
+    <Compile Include="ObsTreeAnalyzer\Package.cs" />
+    <Compile Include="ObsTreeAnalyzer\Project.cs" />
+    <Compile Include="ObsTreeAnalyzer\File.cs" />
+    <Compile Include="ObsTreeAnalyzer\Link.cs" />
+    <Compile Include="ObsTreeAnalyzer\SpecFile.cs" />
+    <Compile Include="ObsTreeAnalyzer\Patch.cs" />
+    <Compile Include="ObsTreeAnalyzer\ChangeLog.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+</Project>
