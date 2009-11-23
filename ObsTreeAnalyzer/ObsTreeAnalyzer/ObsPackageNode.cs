@@ -1,5 +1,5 @@
 // 
-// Node.cs
+// ObsPackageNode.cs
 //  
 // Author:
 //   Aaron Bockover <abockover@novell.com>
@@ -25,37 +25,25 @@
 // THE SOFTWARE.
 
 using System;
-using System.IO;
-using System.Collections.Generic;
 
 namespace ObsTreeAnalyzer
 {
-    public abstract class Node
+    public class ObsPackageNode : ObsXmlNode
     {
-        private List<Node> children = new List<Node> ();
-        public List<Node> Children {
-            get { return children; }
-        }
-        
-        public virtual Node Parent { get; internal protected set; }
-        public virtual string Name { get; protected set; }
-        public virtual string BasePath { get; set; }
-        
-        public virtual void Load ()
+        public override void Load ()
         {
-        }
-
-        protected static string BuildPath (string first, params string [] components)
-        {
-            if (components == null || components.Length == 0) {
-                return first;
+            var xp = XPathLoadOsc ("_files");
+            Name = xp.SelectSingleNode ("/directory/@name").Value;
+            var iter = xp.Select ("/directory/entry/@name");
+            while (iter.MoveNext ()) {
+                var node_path = BuildPath (BasePath, iter.Current.Value);
+                var child = iter.Current.Value == "_link"
+                    ? (Node)new ObsLinkNode () { BasePath = node_path }
+                    : (Node)FileNode.Resolve (node_path);
+                child.Parent = this;
+                child.Load ();
+                Children.Add (child);
             }
-            
-            var result = first;
-            foreach (var component in components) {
-                result = Path.Combine (result, component);
-            }
-            return result;
         }
     }
 }

@@ -1,5 +1,5 @@
 // 
-// Link.cs
+// ObsProjectNode.cs
 //  
 // Author:
 //   Aaron Bockover <abockover@novell.com>
@@ -25,18 +25,27 @@
 // THE SOFTWARE.
 
 using System;
+using System.IO;
+using System.Xml;
+using System.Xml.XPath;
 
 namespace ObsTreeAnalyzer
 {
-    public class Link : File
+    public class ObsProjectNode : ObsXmlNode
     {
-        public Link (string path) : base (path)
-        {
-        }
-        
         public override void Load ()
         {
-            base.Load ();
+            var xp = XPathLoadOsc ("_packages");
+            Name = xp.SelectSingleNode ("/project/@name").Value;
+            var iter = xp.Select ("/project/package/@name");
+            while (iter.MoveNext ()) {
+                var package = new ObsPackageNode () {
+                    BasePath = BuildPath (BasePath, iter.Current.Value),
+                    Parent = this
+                };
+                package.Load ();
+                Children.Add (package);
+            }
         }
     }
 }

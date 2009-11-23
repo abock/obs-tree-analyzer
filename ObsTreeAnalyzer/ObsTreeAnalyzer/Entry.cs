@@ -32,15 +32,14 @@ namespace ObsTreeAnalyzer
     {
         public static void Main (string [] args)
         {
-            var project = new Project (args[0]);
+            var project = new ObsProjectNode () {
+                BasePath = args[0]
+            };
             project.Load ();
             Console.WriteLine (project.Name);
             foreach (var package in project.Children) {
                 Console.WriteLine (package.Name);
                 foreach (var file in package.Children) {
-                    if (file is SpecFile || file is ChangeLog || file is Patch || file is Link) {
-                        continue;
-                    }
                     Console.WriteLine ("  + {0}", file.Name);
                  }
              }

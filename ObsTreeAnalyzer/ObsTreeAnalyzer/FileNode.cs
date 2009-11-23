@@ -1,5 +1,5 @@
 // 
-// SpecFile.cs
+// FileNode.cs
 //  
 // Author:
 //   Aaron Bockover <abockover@novell.com>
@@ -25,17 +25,30 @@
 // THE SOFTWARE.
 
 using System;
+using System.IO;
 
 namespace ObsTreeAnalyzer
 {
-    public class SpecFile : File
+    public class FileNode : Node
     {
-        public SpecFile (string path) : base (path)
-        {
-        }
-        
         public override void Load ()
         {
+            Name = Path.GetFileName (BasePath);
+        }
+        
+        public static FileNode Resolve (string path)
+        {
+            var ext = Path.GetExtension (path);
+            
+            if (ext == ".dif" || ext == ".diff" || ext == ".patch") {
+                return new PatchFileNode () { BasePath = path };
+            } else if (ext == ".spec") {
+                return new SpecFileNode () { BasePath = path };
+            } else if (ext == ".changes") {
+                return new ChangeLogFileNode () { BasePath = path };
+            } else {
+                return new FileNode () { BasePath = path };
+            }
         }
     }
 }

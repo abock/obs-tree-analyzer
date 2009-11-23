@@ -1,5 +1,5 @@
 // 
-// File.cs
+// ChangeLogFileNode.cs
 //  
 // Author:
 //   Aaron Bockover <abockover@novell.com>
@@ -25,38 +25,10 @@
 // THE SOFTWARE.
 
 using System;
-using System.IO;
 
 namespace ObsTreeAnalyzer
 {
-    public class File : Node
+    public class ChangeLogFileNode : FileNode
     {
-        public File (string path)
-        {
-            BasePath = path;
-        }
-        
-        public override void Load ()
-        {
-            Name = Path.GetFileName (BasePath);
-        }
-        
-        public static File Load (string path)
-        {
-            var name = Path.GetFileName (path);
-            var ext = Path.GetExtension (path);
-            
-            if (name == "_link") {
-                return new Link (path);
-            } else if (ext == ".dif" || ext == ".diff" || ext == ".patch") {
-                return new Patch (path);
-            } else if (ext == ".spec") {
-                return new SpecFile (path);
-            } else if (ext == ".changes") {
-                return new ChangeLog (path);
-            } else {
-                return new File (path);
-            }
-        }
     }
 }

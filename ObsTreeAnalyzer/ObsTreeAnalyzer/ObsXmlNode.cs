@@ -1,5 +1,5 @@
 // 
-// Project.cs
+// ObsXmlNode.cs
 //  
 // Author:
 //   Aaron Bockover <abockover@novell.com>
@@ -31,23 +31,18 @@ using System.Xml.XPath;
 
 namespace ObsTreeAnalyzer
 {
-    public class Project : Node
+    public class ObsXmlNode : Node
     {
-        public Project (string path)
+        protected XPathNavigator XPathLoadOsc (string oscFileName)
         {
-            BasePath = path;
+            return XPathLoad (BasePath, ".osc", oscFileName);
         }
         
-        public override void Load ()
+        protected XPathNavigator XPathLoad (string path, params string [] extraPath)
         {
-            var xp = XPathLoad (BasePath, ".osc", "_packages");
-            Name = xp.SelectSingleNode ("/project/@name").Value;
-            var iter = xp.Select ("/project/package/@name");
-            while (iter.MoveNext ()) {
-                var package = new Package (BuildPath (BasePath, iter.Current.Value));
-                package.Load ();
-                Children.Add (package);
+            using (var stream = new FileStream (BuildPath (path, extraPath), FileMode.Open, FileAccess.Read)) {
+                return new XPathDocument (stream).CreateNavigator ();
             }
         }
-    }
+    }   
 }

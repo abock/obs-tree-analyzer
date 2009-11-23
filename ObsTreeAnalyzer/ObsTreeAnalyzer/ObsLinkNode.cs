@@ -1,5 +1,5 @@
 // 
-// ChangeLog.cs
+// ObsLinkNode.cs
 //  
 // Author:
 //   Aaron Bockover <abockover@novell.com>
@@ -28,10 +28,7 @@ using System;
 
 namespace ObsTreeAnalyzer
 {
-    public class ChangeLog : File
+    public class ObsLinkNode : ObsXmlNode
     {
-        public ChangeLog (string path) : base (path)
-        {
-        }
     }
 }

@@ -38,13 +38,14 @@
   <ItemGroup>
     <Compile Include="ObsTreeAnalyzer\Node.cs" />
     <Compile Include="ObsTreeAnalyzer\Entry.cs" />
-    <Compile Include="ObsTreeAnalyzer\Package.cs" />
-    <Compile Include="ObsTreeAnalyzer\Project.cs" />
-    <Compile Include="ObsTreeAnalyzer\File.cs" />
-    <Compile Include="ObsTreeAnalyzer\Link.cs" />
-    <Compile Include="ObsTreeAnalyzer\SpecFile.cs" />
-    <Compile Include="ObsTreeAnalyzer\Patch.cs" />
-    <Compile Include="ObsTreeAnalyzer\ChangeLog.cs" />
+    <Compile Include="ObsTreeAnalyzer\ObsPackageNode.cs" />
+    <Compile Include="ObsTreeAnalyzer\ObsProjectNode.cs" />
+    <Compile Include="ObsTreeAnalyzer\FileNode.cs" />
+    <Compile Include="ObsTreeAnalyzer\ObsLinkNode.cs" />
+    <Compile Include="ObsTreeAnalyzer\SpecFileNode.cs" />
+    <Compile Include="ObsTreeAnalyzer\PatchFileNode.cs" />
+    <Compile Include="ObsTreeAnalyzer\ChangeLogFileNode.cs" />
+    <Compile Include="ObsTreeAnalyzer\ObsXmlNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

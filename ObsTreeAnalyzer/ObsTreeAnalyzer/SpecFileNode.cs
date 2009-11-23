@@ -1,5 +1,5 @@
 // 
-// Patch.cs
+// SpecFileNode.cs
 //  
 // Author:
 //   Aaron Bockover <abockover@novell.com>
@@ -28,14 +28,7 @@ using System;
 
 namespace ObsTreeAnalyzer
 {
-    public class Patch : File
+    public class SpecFileNode : FileNode
     {
-        public Patch (string path) : base (path)
-        {
-        }
-        
-        public override void Load ()
-        {
-        }
     }
 }

@@ -1,5 +1,5 @@
 // 
-// Package.cs
+// PatchFileNode.cs
 //  
 // Author:
 //   Aaron Bockover <abockover@novell.com>
@@ -28,23 +28,7 @@ using System;
 
 namespace ObsTreeAnalyzer
 {
-    public class Package : Node
+    public class PatchFileNode : FileNode
     {
-        public Package (string path)
-        {
-            BasePath = path;
-        }
-        
-        public override void Load ()
-        {
-            var xp = XPathLoad (BasePath, ".osc", "_files");
-            Name = xp.SelectSingleNode ("/directory/@name").Value;
-            var iter = xp.Select ("/directory/entry/@name");
-            while (iter.MoveNext ()) {
-                var file = File.Load (BuildPath (BasePath, iter.Current.Value));
-                file.Load ();
-                Children.Add (file);
-            }
-        }
     }
 }
