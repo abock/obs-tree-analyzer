@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-project="${1%%/*}"
+project="$1"
 dbfile="$project/tree.sqlite"
 selfdir="$(dirname $0)"
 
@@ -19,29 +19,7 @@ if ! test -d "$project" || ! test -d "$project/.osc"; then
 	exit 1
 fi
 
-echo "Creating sqlite database $dbfile..."
-rm -rf -- "$dbfile"
-sqlite3 "$dbfile" <<EOF
-create table spec_files (
-	spec_id integer primary key,
-	obs_project text not null,
-	obs_package text not null,
-	filename text not null,
-	name text not null,
-	version text,
-	has_changelog integer
-);
-
-create table patches (
-	patch_id integer primary key,
-	spec_id integer not null,
-	name text not null,
-	application_order integer not null default -1,
-	unreferenced integer not null default 1
-);
-EOF
-
 echo "Analyzing OBS tree..."
-"mono --debug $selfdir/obs-tree-analyzer.exe" "$project" "$dbfile"
+mono --debug "$selfdir/obs-tree-analyzer.exe" "$project" "$dbfile"
 
 echo "Done."
