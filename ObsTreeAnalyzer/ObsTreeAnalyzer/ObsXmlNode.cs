@@ -44,5 +44,11 @@ namespace ObsTreeAnalyzer
                 return new XPathDocument (stream).CreateNavigator ();
             }
         }
+
+        protected static string XPathSelectSingle (XPathNavigator nav, string expr)
+        {
+            var node = nav.SelectSingleNode (expr);
+            return node == null ? null : node.Value;
+        }
     }   
 }

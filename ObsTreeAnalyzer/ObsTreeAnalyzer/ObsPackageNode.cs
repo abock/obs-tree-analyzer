@@ -33,7 +33,9 @@ namespace ObsTreeAnalyzer
         public override void Load ()
         {
             var xp = XPathLoadOsc ("_files");
+
             Name = xp.SelectSingleNode ("/directory/@name").Value;
+
             var iter = xp.Select ("/directory/entry/@name");
             while (iter.MoveNext ()) {
                 var node_path = BuildPath (BasePath, iter.Current.Value);
@@ -41,8 +43,16 @@ namespace ObsTreeAnalyzer
                     ? (Node)new ObsLinkNode () { BasePath = node_path }
                     : (Node)FileNode.Resolve (node_path);
                 child.Parent = this;
-                child.Load ();
+                if (!(child is ObsLinkNode)) {
+                    child.Load ();
+                }
                 Children.Add (child);
+            }
+
+            // Always load the link last since it depends on other children
+            var link_node = GetChild<ObsLinkNode> ();
+            if (link_node != null) {
+                link_node.Load ();
             }
         }
     }

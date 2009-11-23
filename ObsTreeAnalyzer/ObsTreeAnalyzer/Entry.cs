@@ -36,11 +36,11 @@ namespace ObsTreeAnalyzer
                 BasePath = args[0]
             };
             project.Load ();
-            Console.WriteLine (project.Name);
+            Console.WriteLine (project);
             foreach (var package in project.Children) {
-                Console.WriteLine (package.Name);
+                Console.WriteLine (package);
                 foreach (var file in package.Children) {
-                    Console.WriteLine ("  + {0}", file.Name);
+                    Console.WriteLine ("  + {0}", file);
                  }
              }
         }

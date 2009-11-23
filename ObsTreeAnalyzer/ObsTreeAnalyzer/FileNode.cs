@@ -50,5 +50,10 @@ namespace ObsTreeAnalyzer
                 return new FileNode () { BasePath = path };
             }
         }
+
+        public override string ToString ()
+        {
+            return Name;
+        }
     }
 }

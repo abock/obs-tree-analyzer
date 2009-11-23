@@ -30,5 +30,23 @@ namespace ObsTreeAnalyzer
 {
     public class ObsLinkNode : ObsXmlNode
     {
+        public string TargetProjectName { get; protected set; }
+        public string TargetPackageName { get; protected set; }
+        public string TargetBaseRevision { get; protected set; }
+
+        public override void Load ()
+        {
+            Name = "_link";
+            var xp = XPathLoad (BasePath);
+            TargetProjectName = XPathSelectSingle (xp, "/link/@project");
+            TargetPackageName = XPathSelectSingle (xp, "/link/@package");
+            TargetBaseRevision = XPathSelectSingle (xp, "/link/@baserev");
+        }
+
+        public override string ToString ()
+        {
+            return String.Format ("{0} => {1}/{2} @ {3}",
+                Name, TargetProjectName, TargetPackageName, TargetBaseRevision ?? "<HEAD>");
+        }
     }
 }

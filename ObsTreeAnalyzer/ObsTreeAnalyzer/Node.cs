@@ -36,11 +36,21 @@ namespace ObsTreeAnalyzer
         public List<Node> Children {
             get { return children; }
         }
-        
-        public virtual Node Parent { get; internal protected set; }
+
         public virtual string Name { get; protected set; }
         public virtual string BasePath { get; set; }
-        
+        public virtual Node Parent { get; internal protected set; }
+
+        public virtual Node RootAncestor {
+            get {
+                var root = Parent ?? this;
+                while (root != null && root.Parent != null) {
+                    root = root.Parent;
+                }
+                return root;
+            }
+        }
+
         public virtual void Load ()
         {
         }
@@ -56,6 +66,56 @@ namespace ObsTreeAnalyzer
                 result = Path.Combine (result, component);
             }
             return result;
+        }
+
+        public Node GetChild (string name)
+        {
+            return GetChild (name, null);
+        }
+
+        public T GetChild<T> (string name) where T : Node
+        {
+            return GetChild (name, typeof (T)) as T;
+        }
+
+        public Node GetChild (string name, Type type)
+        {
+            return GetChild (child => child.Name == name
+                && (type == null || child.GetType () == type));
+        }
+
+        public T GetChild<T> () where T : Node
+        {
+            return GetChild (child => child is T) as T;
+        }
+
+        public Node GetChild (Predicate<Node> match)
+        {
+            return Children.Find (match);
+        }
+
+        public IEnumerable<T> GetChildren<T> () where T : Node
+        {
+            return GetChildren<T> (false);
+        }
+
+        public IEnumerable<T> GetChildren<T> (bool exactType) where T : Node
+        {
+            foreach (var child in GetChildren (child => exactType
+                ? child is T
+                : typeof (T).IsInstanceOfType (child))) {
+                yield return child as T;
+            }
+        }
+
+        public IEnumerable<Node> GetChildren (Predicate<Node> match)
+        {
+            return Children.FindAll (match);
+        }
+
+        public override string ToString ()
+        {
+            return String.Format ("{0} [{1}]", Name, Children.Count);
         }
     }
 }
