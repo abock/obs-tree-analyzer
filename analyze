@@ -12,7 +12,7 @@ if ! test "$#" -eq 1; then
 fi
 
 echo "Updating checkout of $project..."
-"$selfdir/phases/osc-checkout-project" "$project"
+#"$selfdir/osc-checkout-project" "$project"
 
 if ! test -d "$project" || ! test -d "$project/.osc"; then
 	echo "$project is not a valid OBS checkout"
@@ -41,15 +41,7 @@ create table patches (
 );
 EOF
 
-echo "Analyzing spec files of all packages..."
-for package in $(find "$project" -maxdepth 1 -mindepth 1 -type d \
-	| cut -f2 -d\/ | grep -v .osc); do
-	prj_pac="$project/$package"
-	for spec in $(find "$prj_pac" -maxdepth 1 -name \*.spec -type f); do
-		echo "==> $package"
-		"$selfdir/phases/analyze-spec-file" "$spec" "$dbfile" \
-			"$project" "$package"
-	done
-done
+echo "Analyzing OBS tree..."
+"mono --debug $selfdir/obs-tree-analyzer.exe" "$project" "$dbfile"
 
 echo "Done."
