@@ -37,6 +37,20 @@
     <Compile Include="ObsTreeAnalyzer\PatchFileNode.cs" />
     <Compile Include="ObsTreeAnalyzer\ChangeLogFileNode.cs" />
     <Compile Include="ObsTreeAnalyzer\ObsXmlNode.cs" />
+    <Compile Include="Mono.TextTemplating\CompiledTemplate.cs" />
+    <Compile Include="Mono.TextTemplating\IExtendedTextTemplatingEngineHost.cs" />
+    <Compile Include="Mono.TextTemplating\ParsedTemplate.cs" />
+    <Compile Include="Mono.TextTemplating\TemplateGenerator.cs" />
+    <Compile Include="Mono.TextTemplating\TemplateSettings.cs" />
+    <Compile Include="Mono.TextTemplating\TemplatingEngine.cs" />
+    <Compile Include="Mono.TextTemplating\Tokeniser.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\DirectiveProcessor.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\DirectiveProcessorException.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\Engine.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\ITextTemplatingEngineHost.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\RequiresProvidesDirectiveProcessor.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\TextTransformation.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\ToStringHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -46,6 +60,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
   </ItemGroup>

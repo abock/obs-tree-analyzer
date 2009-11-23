@@ -1,10 +1,10 @@
 // 
-// Entry.cs
+// TemplateSettings.cs
 //  
 // Author:
-//   Aaron Bockover <abockover@novell.com>
+//       Michael Hutchinson <mhutchinson@novell.com>
 // 
-// Copyright 2009 Novell, Inc.
+// Copyright (c) 2009 Novell, Inc. (http://www.novell.com)
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,24 +25,30 @@
 // THE SOFTWARE.
 
 using System;
+using System.Text;
+using System.Collections.Generic;
 
-namespace ObsTreeAnalyzer
+namespace Mono.TextTemplating
 {
-    public static class Entry
-    {
-        public static void Main (string [] args)
-        {
-            var project = new ObsProjectNode () {
-                BasePath = args[0]
-            };
-            project.Load ();
-            Console.WriteLine (project);
-            foreach (var package in project.Children) {
-                Console.WriteLine (package);
-                foreach (var file in package.Children) {
-                    Console.WriteLine ("  + {0}", file);
-                 }
-             }
-        }
-    }
+	
+	public class TemplateSettings
+	{
+		public TemplateSettings ()
+		{
+			Imports = new List<string> ();
+			Assemblies = new List<string> ();
+		}
+		
+		public bool HostSpecific { get; set; }
+		public bool Debug { get; set; }
+		public string Inherits { get; set; }
+		public string Name { get; set; }
+		public string Namespace { get; set; }
+		public List<string> Imports { get; private set; }
+		public List<string> Assemblies { get; private set; }
+		public System.CodeDom.Compiler.CodeDomProvider Provider { get; set; }
+		public Encoding Encoding { get; set; }
+		public string Extension { get; set; }
+		public System.Globalization.CultureInfo Culture { get; set; }
+	}
 }
