@@ -25,10 +25,98 @@
 // THE SOFTWARE.
 
 using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace ObsTreeAnalyzer
 {
     public class SpecFileNode : FileNode
     {
+        public string Version { get; protected set; }
+        public bool HasChangeLog { get; protected set; }
+
+        private List<FileNode> sources = new List<FileNode> ();
+        private List<PatchFileNode> patches = new List<PatchFileNode> ();
+
+        public override void Load ()
+        {
+            var patch_map = new Dictionary<string, PatchFileNode> ();
+            var patch_application_count = 0;
+            var processed_setup = false;
+            var in_changelog = false;
+
+            using (var reader = new StreamReader (BasePath)) {
+                string line = null;
+                while ((line = reader.ReadLine ()) != null) {
+                    // Strip leading/trailing whitespace and comments
+                    line = line.Trim ();
+                    line = Regex.Replace (line, @"^#.*", String.Empty);
+                    line = Regex.Replace (line, @"\s+#.*", String.Empty);
+
+                    var match = Regex.Match (line, @"^(\w+):\s*(.+)$");
+                    if (match.Success) {
+                        var field = match.Groups[1].Value.ToLower ();
+                        var value = match.Groups[2].Value;
+
+                        if (!String.IsNullOrEmpty (Name)) {
+                            value = value.Replace ("%{name}", Name).Replace ("%name", Name);
+                        }
+
+                        if (!String.IsNullOrEmpty (Version)) {
+                            value = value.Replace ("%{version}", Version).Replace ("%version", Version);
+                        }
+
+                        if (field == "name") {
+                            Name = value;
+                        } else if (field == "version") {
+                            Version = value;
+                        } else if (field == "changelog") {
+                            in_changelog = true;
+                        } else if (field.StartsWith ("patch")) {
+                            Parent.WithChild<PatchFileNode> (value, patch => {
+                                patch.ApplicationIndex = -1;
+                                patch_map.Add (field, patch);
+                            });
+                        } else if (field.StartsWith ("source")) {
+                            Parent.WithChild<FileNode> (value, source => {
+                                source.IsSpecSource = true;
+                                sources.Add (source);
+                            });
+                        } else {
+                            in_changelog = false;
+                        }
+
+                        continue;
+                    }
+
+                    match = Regex.Match (line, @"^%(\w+)\s*");
+                    if (match.Success) {
+                        var directive = match.Groups[1].Value.ToLower ();
+                        PatchFileNode patch = null;
+
+                        if (directive == "setup") {
+                            processed_setup = true;
+                        } else if (directive.StartsWith ("patch") && processed_setup &&
+                            patch_map.TryGetValue (directive, out patch)) {
+                            patch.ApplicationIndex = patch_application_count++;
+                            patches.Add (patch);
+                        }
+
+                        continue;
+                    }
+
+                    if (in_changelog && !String.IsNullOrEmpty (line)) {
+                        HasChangeLog = true;
+                    }
+                }
+            }
+        }
+
+        public override string ToString ()
+        {
+            return String.Format ("{0} [Name={1}, Version={2}, AppliedPatches={3}, Sources={4}, HasChangeLog={5}]",
+                Path.GetFileName (BasePath), Name, Version, patches.Count, sources.Count, HasChangeLog);
+        }
     }
 }

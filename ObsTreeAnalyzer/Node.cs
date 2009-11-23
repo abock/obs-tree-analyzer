@@ -94,6 +94,14 @@ namespace ObsTreeAnalyzer
             return Children.Find (match);
         }
 
+        public void WithChild<T> (string name, Action<T> action) where T : Node
+        {
+            var child = GetChild<T> (name);
+            if (child != null) {
+                action (child);
+            }
+        }
+
         public IEnumerable<T> GetChildren<T> () where T : Node
         {
             return GetChildren<T> (false);

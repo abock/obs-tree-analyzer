@@ -31,9 +31,18 @@ namespace ObsTreeAnalyzer
 {
     public class FileNode : Node
     {
+        public bool IsSpecSource { get; internal protected set; }
+
         public override void Load ()
         {
             Name = Path.GetFileName (BasePath);
+        }
+
+        public override string ToString ()
+        {
+            return IsSpecSource
+                ? String.Format ("{0} [SPEC SOURCE]", Name)
+                : Name;
         }
         
         public static FileNode Resolve (string path)
@@ -49,11 +58,6 @@ namespace ObsTreeAnalyzer
             } else {
                 return new FileNode () { BasePath = path };
             }
-        }
-
-        public override string ToString ()
-        {
-            return Name;
         }
     }
 }

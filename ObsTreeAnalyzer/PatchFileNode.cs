@@ -30,5 +30,20 @@ namespace ObsTreeAnalyzer
 {
     public class PatchFileNode : FileNode
     {
+        public int ApplicationIndex { get; internal protected set; }
+
+        public PatchFileNode ()
+        {
+            ApplicationIndex = -2;
+        }
+
+        public override string ToString ()
+        {
+            return ApplicationIndex < -1
+                ? String.Format ("{0} [UNREFERENCED]", Name)
+                : (ApplicationIndex < 0
+                    ? String.Format ("{0} [UNAPPLIED]", Name)
+                    : String.Format ("{0} [apply {1}]", Name, ApplicationIndex));
+        }
     }
 }
