@@ -113,6 +113,25 @@ namespace ObsTreeAnalyzer
             return Children.FindAll (match);
         }
 
+        public void WithChildren (Predicate<Node> match, Action<Node> action)
+        {
+             foreach (var child in GetChildren (match)) {
+                action (child);
+             }
+        }
+
+        public void WithChildren<T> (Action<T> action) where T : Node
+        {
+            WithChildren<T> (action, false);
+        }
+
+        public void WithChildren<T> (Action<T> action, bool exactType) where T : Node
+        {
+            foreach (var child in GetChildren<T> (exactType)) {
+                action (child);
+            }
+        }
+
         public override string ToString ()
         {
             return String.Format ("{0} [{1}]", Name, Children.Count);

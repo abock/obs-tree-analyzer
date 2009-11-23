@@ -42,18 +42,21 @@ namespace ObsTreeAnalyzer
                 var child = iter.Current.Value == "_link"
                     ? (Node)new ObsLinkNode () { BasePath = node_path }
                     : (Node)FileNode.Resolve (node_path);
+
                 child.Parent = this;
-                if (!(child is ObsLinkNode)) {
-                    child.Load ();
-                }
                 Children.Add (child);
+
+                // We will load these nodes after all other nodes
+                if (child is ObsLinkNode || child is SpecFileNode) {
+                    continue;
+                }
+
+                child.Load ();
             }
 
-            // Always load the link last since it depends on other children
-            var link_node = GetChild<ObsLinkNode> ();
-            if (link_node != null) {
-                link_node.Load ();
-            }
+            // Always load the link and spec files last since they depend on other children
+            WithChildren<ObsLinkNode> (child => child.Load ());
+            WithChildren<SpecFileNode> (child => child.Load ());
         }
     }
 }
