@@ -1,1 +1,6 @@
 trees/
+*.exe
+*.dll
+*.mdb
+*.pidb
+*.user*
