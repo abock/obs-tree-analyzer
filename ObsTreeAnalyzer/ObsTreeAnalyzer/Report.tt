@@ -27,15 +27,15 @@
         from package in project
         where package.Link != null
         orderby
-            package.Link.TargetProjectName descending,
+            package.Link.TargetProjectName,
             package.Link.TargetBaseRevision descending,
             package.Name
         select package) {
 #>
     <tr>
       <td><#= package.Name #></td>
-      <td><#= package.Link.TargetProjectName ?? "&lt;self&gt;" #></td>
-      <td><#= package.Link.TargetBaseRevision ?? "HEAD" #></td>
+      <td><#= package.Link.TargetProjectName #></td>
+      <td><#= package.Link.TargetBaseRevision #></td>
     </tr>
 <# } #>
   </table>

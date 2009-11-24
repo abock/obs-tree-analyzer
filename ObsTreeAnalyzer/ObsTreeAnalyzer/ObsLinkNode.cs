@@ -38,8 +38,8 @@ namespace ObsTreeAnalyzer
         {
             Name = "_link";
             var xp = XPathLoad (BasePath);
-            TargetProjectName = XPathSelectSingle (xp, "/link/@project");
-            TargetPackageName = XPathSelectSingle (xp, "/link/@package");
+            TargetProjectName = XPathSelectSingle (xp, "/link/@project") ?? RootAncestor.Name;
+            TargetPackageName = XPathSelectSingle (xp, "/link/@package") ?? Parent.Name;
             TargetBaseRevision = XPathSelectSingle (xp, "/link/@baserev");
         }
 
