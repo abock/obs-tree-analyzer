@@ -13,6 +13,8 @@
     <None Include="style.css" />
     <None Include="jquery-1.3.2.min.js" />
     <None Include="report.js" />
+    <None Include="jquery.tablesorter.collapsible.js" />
+    <None Include="jquery.tablesorter.mod.js" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

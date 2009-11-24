@@ -1,47 +1,81 @@
 body {
-    font-family: sans-serif;
+    font-family: "DejaVu Sans", sans-serif;
+    font-size: 0.7em;
+    color: #0e1c2c;
 }
 
 table {
-    border-collapse: collapse;
+    border: 1px solid #3465a4 !important;
 }
 
-tr > th {
-    background: #ccc;
+table * {
+    vertical-align: top;
+    text-align: left;
 }
 
 th {
-    font-style: bold;
+    background-color: #729fcf;
+    padding: 3px 6px;
+    margin-bottom: 1em;
+    font-size: 1.25em;
 }
 
-th, td {
-    text-align: left;
-    padding: 2px 1em 2px 2px;
-    border: 1px solid #ccc;
+td {
+    padding: 3px 3em 3px 6px;
 }
 
-tr.details {
-    display: none;
+tr.odd {
+    background-color: #e5edf6;
 }
 
-tr.details table {
-    padding: 1em;
-    font-size: 75%;
+/* Sorting */
+
+th.header {
+    cursor: pointer;
 }
 
-tr.details table th, tr.details table td {
-    background-color: transparent;
-    border: none !important;
+th.headerSortUp {
+    background-color: #3465a4;
+    color: #fff;
 }
 
-tr.package {
-    cursor: hand;
+th.headerSortUp:after {
+    content: ' \25B4';
 }
 
-tr.package:hover {
-    background-color: #ddd;
+th.headerSortDown {
+    background-color: #3465a4;
+    color: #fff;
 }
 
-.selected, .selected:hover {
-    background-color: #fc0 !important;
+th.headerSortDown:after {
+    content: ' \25BE';
+}
+
+/* Collapsing */
+
+.collapsible {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.collapsible {
+    background-color: #3465a4;
+}
+
+.collapsible a {
+    display: block;
+    outline: 0;
+    color: #bfd3e9;
+    text-decoration: none;
+    padding: 0 3px;
+    font-size: 1.5em;
+}
+
+.collapsible a.collapsed:after {
+    content: '\25B8';
+}
+
+.collapsible a.expanded:after {
+    content: '\25BE';
 }

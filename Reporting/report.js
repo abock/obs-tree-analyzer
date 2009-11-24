@@ -1,12 +1,8 @@
 $(document).ready (function () {
-    $(".package").click (function () {
-        var package = this;
-        $("#" + $(package).attr ("id") + "-details").toggle (0, function () {
-            if ($(this).is (":visible")) {
-                $(package).addClass ("selected");
-            } else {
-                $(package).removeClass ("selected");
-            }
-        });
+    $(".tablesorter").collapsible ("td.collapsible", {
+        collapse: true
+    }).tablesorter ({
+        sortList: [[2, 0]],
+        headers: { 0: {sorter: false}}, widgets: ['zebra']
     });
 });

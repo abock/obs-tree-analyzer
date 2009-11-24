@@ -13,7 +13,9 @@
 
     project.Load ();
 #>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
 <head>
 <title>OBS Report for <#= project.Name #></title>
 <style type="text/css">
@@ -21,6 +23,8 @@
 </style>
 <script type="text/javascript">
 <#@ include file="jquery-1.3.2.min.js" #>
+<#@ include file="jquery.tablesorter.mod.js" #>
+<#@ include file="jquery.tablesorter.collapsible.js" #>
 <#@ include file="report.js" #>
 </script>
 </head>
@@ -28,13 +32,17 @@
   <h1>OBS Report for <#= project.Name #></h1>
   <p>Generated at <#= DateTime.Now #>. <#= project.Children.Count #> total packages.</p>
   <h2>Linked Packages</h2>
-  <table>
+  <table class="tablesorter" id="linked-packages" cellspacing="0">
+  <thead>
     <tr>
+      <th class="collapsible"></th>
       <th>Package</th>
       <th>Target Project</th>
       <th>Target Package</th>
       <th>Revisioned</th>
     </tr>
+  </thead>
+  <tbody>
 <#
     foreach (var package in
         from package in project
@@ -44,7 +52,8 @@
             package.Name
         select package) {
 #>
-    <tr id="link-<#= to_css_id (package.Name) #>" class="package">
+    <tr>
+      <td class="collapsible" rowspan="2"></td>
       <td><#= package.Name #></td>
       <td><#= package.Link.TargetProjectName #></td>
       <td><#= package.Link.TargetPackageName #></td>
@@ -52,32 +61,33 @@
           ? package.Link.TargetBaseRevision.Substring (0, 8)
           : null #></td>
     </tr>
-    <tr id="link-<#= to_css_id (package.Name) #>-details" class="details">
+    <tr class="expand-child">
       <td colspan="4">
-        <table>
-          <# if (package.Link.TargetBaseRevision != null) { #>
-          <tr>
-            <th>Base Revision</th>
-            <td><#= package.Link.TargetBaseRevision #></td>
-          </tr>
-          <# } #>
-          <# if (package.Link.CommitCountAction != null) { #>
-          <tr>
-            <th>Commit Count</th>
-            <td><#= package.Link.CommitCountAction #></td>
-          </tr>
-          <# } #>
-        </table>
+        <dl>
+        <# if (package.Link.TargetBaseRevision != null) { #>
+          <dt>Base Revision</dt>
+          <dd><#= package.Link.TargetBaseRevision #></dd>
+        <# } #>
+        <# if (package.Link.CommitCountAction != null) { #>
+          <dt>Commit Count</dt>
+          <dd><#= package.Link.CommitCountAction #></dd>
+        <# } #>
+        </dl>
       </td>
     </tr>
 <# } #>
+  </tbody>
   </table>
 
   <h2>Owned Packages</h2>
-  <table>
+  <table class="tablesorter" id="owned-packages" cellspacing="0">
+  <thead>
     <tr>
+      <th class="collapsible"></th>
       <th>Package</th>
     </tr>
+  </thead>
+  <tbody>
 <#
     foreach (var package in
         from package in project
@@ -86,9 +96,14 @@
         select package) {
 #>
     <tr>
+      <td class="collapsible" rowspan="2"></td>
       <td><#= package.Name #></td>
     </tr>
+    <tr class="expand-child">
+      <td>Foo</td>
+    </tr>
 <# } #>
+  </tbody>
   </table>
 </body>
 </html>
