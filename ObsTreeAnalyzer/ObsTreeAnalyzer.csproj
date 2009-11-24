@@ -6,9 +6,9 @@
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{06116FBD-7C63-428F-9CA7-FB5726986AA7}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>ObsTreeAnalyzer</RootNamespace>
-    <AssemblyName>obs-tree-analyzer</AssemblyName>
+    <AssemblyName>ObsTreeAnalyzer</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|anycpu' ">
@@ -24,11 +24,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="ObsTreeAnalyzer\" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="ObsTreeAnalyzer\Node.cs" />
-    <Compile Include="ObsTreeAnalyzer\Entry.cs" />
     <Compile Include="ObsTreeAnalyzer\ObsPackageNode.cs" />
     <Compile Include="ObsTreeAnalyzer\ObsProjectNode.cs" />
     <Compile Include="ObsTreeAnalyzer\FileNode.cs" />
@@ -37,47 +33,12 @@
     <Compile Include="ObsTreeAnalyzer\PatchFileNode.cs" />
     <Compile Include="ObsTreeAnalyzer\ChangeLogFileNode.cs" />
     <Compile Include="ObsTreeAnalyzer\ObsXmlNode.cs" />
-    <Compile Include="Mono.TextTemplating\CompiledTemplate.cs" />
-    <Compile Include="Mono.TextTemplating\IExtendedTextTemplatingEngineHost.cs" />
-    <Compile Include="Mono.TextTemplating\ParsedTemplate.cs" />
-    <Compile Include="Mono.TextTemplating\TemplateGenerator.cs" />
-    <Compile Include="Mono.TextTemplating\TemplateSettings.cs" />
-    <Compile Include="Mono.TextTemplating\TemplatingEngine.cs" />
-    <Compile Include="Mono.TextTemplating\Tokeniser.cs" />
-    <Compile Include="Microsoft.VisualStudio.TextTemplating\DirectiveProcessor.cs" />
-    <Compile Include="Microsoft.VisualStudio.TextTemplating\DirectiveProcessorException.cs" />
-    <Compile Include="Microsoft.VisualStudio.TextTemplating\Engine.cs" />
-    <Compile Include="Microsoft.VisualStudio.TextTemplating\ITextTemplatingEngineHost.cs" />
-    <Compile Include="Microsoft.VisualStudio.TextTemplating\RequiresProvidesDirectiveProcessor.cs" />
-    <Compile Include="Microsoft.VisualStudio.TextTemplating\TextTransformation.cs" />
-    <Compile Include="Microsoft.VisualStudio.TextTemplating\ToStringHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ObsTreeAnalyzer\Report.tt">
-      <LogicalName>Report.tt</LogicalName>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ProjectExtensions>
-    <MonoDevelop>
-      <Properties>
-        <Policies>
-          <DotNetNamingPolicy DirectoryNamespaceAssociation="None" ResourceNamePolicy="FileName" />
-        </Policies>
-      </Properties>
-    </MonoDevelop>
-  </ProjectExtensions>
 </Project>

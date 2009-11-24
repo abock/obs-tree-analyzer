@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObsTreeAnalyzer", "ObsTreeAnalyzer\ObsTreeAnalyzer.csproj", "{06116FBD-7C63-428F-9CA7-FB5726986AA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextTransform", "TextTransform\TextTransform.csproj", "{AE99B7A9-9061-4DDF-AAEC-E2F31D642E97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reporting", "Reporting\Reporting.csproj", "{D78BD7E1-5D2E-4D12-9BD7-0FA3DE5792B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|anycpu = Debug|anycpu
+		Release|anycpu = Release|anycpu
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{06116FBD-7C63-428F-9CA7-FB5726986AA7}.Debug|anycpu.ActiveCfg = Debug|anycpu
+		{06116FBD-7C63-428F-9CA7-FB5726986AA7}.Debug|anycpu.Build.0 = Debug|anycpu
+		{AE99B7A9-9061-4DDF-AAEC-E2F31D642E97}.Debug|anycpu.ActiveCfg = Debug|anycpu
+		{AE99B7A9-9061-4DDF-AAEC-E2F31D642E97}.Debug|anycpu.Build.0 = Debug|anycpu
+		{D78BD7E1-5D2E-4D12-9BD7-0FA3DE5792B5}.Debug|anycpu.ActiveCfg = Debug|anycpu
+		{D78BD7E1-5D2E-4D12-9BD7-0FA3DE5792B5}.Debug|anycpu.Build.0 = Debug|anycpu
+		{D78BD7E1-5D2E-4D12-9BD7-0FA3DE5792B5}.Release|anycpu.ActiveCfg = Release|anycpu
+		{D78BD7E1-5D2E-4D12-9BD7-0FA3DE5792B5}.Release|anycpu.Build.0 = Release|anycpu
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = TextTransform\TextTransform.csproj
+	EndGlobalSection
+EndGlobal

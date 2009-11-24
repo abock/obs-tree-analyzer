@@ -214,7 +214,11 @@ namespace Mono.TextTemplating
 		
 		string ITextTemplatingEngineHost.ResolveParameterValue (string directiveId, string processorName, string parameterName)
 		{
-			throw new NotImplementedException();
+            if (directiveId != null || processorName != null) {
+                throw new NotImplementedException ("neither directiveId nor processorName arguments are supported");
+            }
+
+            return ProcessorValues[parameterName];
 		}
 		
 		string ITextTemplatingEngineHost.ResolvePath (string path)

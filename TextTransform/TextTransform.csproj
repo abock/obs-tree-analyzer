@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">anycpu</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AE99B7A9-9061-4DDF-AAEC-E2F31D642E97}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Mono.TextTransform</RootNamespace>
+    <AssemblyName>text-transform</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|anycpu' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <Commandlineparameters>/home/aaron/src/obs-tree-analyzer/trees/Moblin:Factory /home/aaron/src/obs-tree-analyzer/report.html</Commandlineparameters>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="Mono.TextTemplating\CompiledTemplate.cs" />
+    <Compile Include="Mono.TextTemplating\IExtendedTextTemplatingEngineHost.cs" />
+    <Compile Include="Mono.TextTemplating\ParsedTemplate.cs" />
+    <Compile Include="Mono.TextTemplating\TemplateGenerator.cs" />
+    <Compile Include="Mono.TextTemplating\TemplateSettings.cs" />
+    <Compile Include="Mono.TextTemplating\TemplatingEngine.cs" />
+    <Compile Include="Mono.TextTemplating\Tokeniser.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\DirectiveProcessor.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\DirectiveProcessorException.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\Engine.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\ITextTemplatingEngineHost.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\RequiresProvidesDirectiveProcessor.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\TextTransformation.cs" />
+    <Compile Include="Microsoft.VisualStudio.TextTemplating\ToStringHelper.cs" />
+    <Compile Include="TextTransform\Main.cs" />
+    <Compile Include="TextTransform\Options.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TextTransform\" />
+  </ItemGroup>
+</Project>

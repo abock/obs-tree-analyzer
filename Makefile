@@ -1,12 +1,12 @@
-ASSEMBLY = obs-tree-analyzer.exe
-SOURCES = $(shell find ObsTreeAnalyzer)
+ASSEMBLIES = text-transform.exe ObsTreeAnalyzer.dll
+SOURCES = $(shell find ObsTreeAnalyzer TextTransform)
 
-$(ASSEMBLY): $(SOURCES)
-	mdtool build ObsTreeAnalyzer/ObsTreeAnalyzer.sln
+$(ASSEMBLIES): $(SOURCES)
+	mdtool build ObsTreeAnalyzer.sln
 
-run: $(ASSEMBLY)
+run: $(ASSEMBLIES)
 	./analyze trees/Moblin\:Factory
 	gnome-open trees/Moblin\:Factory/report.html
 
 clean:
-	rm -f $(ASSEMBLY){,.mdb}
+	rm -f *.exe *.dll *.mdb
