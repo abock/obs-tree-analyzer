@@ -41,6 +41,10 @@ namespace ObsTreeAnalyzer
             TargetProjectName = XPathSelectSingle (xp, "/link/@project") ?? RootAncestor.Name;
             TargetPackageName = XPathSelectSingle (xp, "/link/@package") ?? Parent.Name;
             TargetBaseRevision = XPathSelectSingle (xp, "/link/@baserev");
+
+            if (TargetPackageName == Parent.Name) {
+                TargetPackageName = null;
+            }
         }
 
         public override string ToString ()

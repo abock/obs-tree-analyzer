@@ -2,6 +2,32 @@ body {
     font-family: sans-serif;
 }
 
+table {
+    border-collapse: collapse;
+}
+
+tr > th {
+    background: #ccc;
+}
+
 th {
+    font-style: bold;
+}
+
+th, td {
     text-align: left;
+    padding: 2px 1em 2px 2px;
+    border: 1px solid #ccc;
+}
+
+tr.details {
+    display: none;
+}
+
+tr.package {
+    cursor: hand;
+}
+
+tr.package:hover {
+    background-color: #fc0;
 }

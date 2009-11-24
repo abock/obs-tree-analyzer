@@ -2,8 +2,11 @@
 <#@ assembly name="ObsTreeAnalyzer" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
 <#@ import namespace="ObsTreeAnalyzer" #>
 <#
+    Func<string, string> to_css_id = s => Regex.Replace (s, @"[^\w]", String.Empty);
+
     var project = new ObsProjectNode () {
         BasePath = Host.ResolveParameterValue (null, null, "obs-project-path")
     };
@@ -16,6 +19,10 @@
 <style type="text/css">
 <#@ include file="Style.css" #>
 </style>
+<script type="text/javascript">
+<#@ include file="jquery-1.3.2.min.js" #>
+<#@ include file="report.js" #>
+</script>
 </head>
 <body>
   <h2>Linked Packages</h2>
@@ -23,7 +30,8 @@
     <tr>
       <th>Package</th>
       <th>Target Project</th>
-      <th>Base Revision</th>
+      <th>Target Package</th>
+      <th>Revisioned</th>
     </tr>
 <#
     foreach (var package in
@@ -31,14 +39,25 @@
         where package.Link != null
         orderby
             package.Link.TargetProjectName,
-            package.Link.TargetBaseRevision descending,
             package.Name
         select package) {
 #>
-    <tr>
+    <tr id="link-<#= to_css_id (package.Name) #>" class="package">
       <td><#= package.Name #></td>
       <td><#= package.Link.TargetProjectName #></td>
-      <td><#= package.Link.TargetBaseRevision #></td>
+      <td><#= package.Link.TargetPackageName #></td>
+      <td><#= package.Link.TargetBaseRevision != null
+          ? package.Link.TargetBaseRevision.Substring (0, 8)
+          : null #></td>
+    </tr>
+    <tr id="link-<#= to_css_id (package.Name) #>-details" class="details">
+      <td colspan="3">
+        <table>
+          <tr>
+            <td><#= package.Link.TargetBaseRevision #></td>
+          </tr>
+        </table>
+      </td>
     </tr>
 <# } #>
   </table>
