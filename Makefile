@@ -4,7 +4,7 @@ SOURCES = $(shell find ObsTreeAnalyzer)
 $(ASSEMBLY): $(SOURCES)
 	mdtool build ObsTreeAnalyzer/ObsTreeAnalyzer.sln
 
-run:
+run: $(ASSEMBLY)
 	./analyze trees/Moblin\:Factory
 	gnome-open trees/Moblin\:Factory/report.html
 

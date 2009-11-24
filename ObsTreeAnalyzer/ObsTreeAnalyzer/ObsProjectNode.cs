@@ -28,10 +28,11 @@ using System;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
+using System.Collections.Generic;
 
 namespace ObsTreeAnalyzer
 {
-    public class ObsProjectNode : ObsXmlNode
+    public class ObsProjectNode : ObsXmlNode, IEnumerable<ObsPackageNode>
     {
         public override void Load ()
         {
@@ -46,6 +47,18 @@ namespace ObsTreeAnalyzer
                 package.Load ();
                 Children.Add (package);
             }
+        }
+
+        public IEnumerator<ObsPackageNode> GetEnumerator ()
+        {
+            foreach (var child in GetChildren<ObsPackageNode> ()) {
+                yield return child;
+            }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
+        {
+            return GetEnumerator ();
         }
     }
 }

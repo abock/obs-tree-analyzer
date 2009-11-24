@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 namespace ObsTreeAnalyzer
 {
@@ -57,6 +58,18 @@ namespace ObsTreeAnalyzer
             // Always load the link and spec files last since they depend on other children
             WithChildren<ObsLinkNode> (child => child.Load ());
             WithChildren<SpecFileNode> (child => child.Load ());
+        }
+
+        public ObsLinkNode Link {
+            get { return GetChild<ObsLinkNode> (); }
+        }
+
+        public IEnumerable<SpecFileNode> SpecFiles {
+            get { return GetChildren<SpecFileNode> (); }
+        }
+
+        public IEnumerable<PatchFileNode> PatchFiles {
+            get { return GetChildren<PatchFileNode> (); }
         }
     }
 }
