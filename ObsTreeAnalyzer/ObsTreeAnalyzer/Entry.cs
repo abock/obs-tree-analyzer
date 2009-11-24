@@ -26,18 +26,39 @@
 
 using System;
 using System.IO;
+using System.Reflection;
+
+using Mono.TextTemplating;
 
 namespace ObsTreeAnalyzer
 {
     public static class Entry
     {
-        public static void Main (string [] args)
+        public static int Main (string [] args)
         {
-            var project = new ObsProjectNode () {
-                BasePath = args[0]
-            };
+            var template_generator = new TemplateGenerator ();
 
-            project.Load ();
+            using (var stream = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("Report.tt")) {
+                using (var reader = new StreamReader (stream)) {
+                    var template = template_generator.CompileTemplate (reader.ReadToEnd ());
+                    if (template != null) {
+                        using (var writer = new StreamWriter (args[1])) {
+                            writer.Write (template.Process ());
+                        }
+                    }
+                }
+            }
+
+            if (template_generator.Errors.HasErrors) {
+                Console.Error.WriteLine ("Failed to generate report from T4 template.");
+                foreach (System.CodeDom.Compiler.CompilerError error in template_generator.Errors) {
+                    Console.Error.WriteLine ("{0}({1},{2}): {3} {4}",
+                        error.FileName, error.Line, error.Column,
+                        error.IsWarning? "WARNING" : "ERROR", error.ErrorText);
+                }
+            }
+
+            return template_generator.Errors.HasErrors ? 1 : 0;
         }
     }
 }

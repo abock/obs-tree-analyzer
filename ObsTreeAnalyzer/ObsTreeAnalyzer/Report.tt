@@ -1,0 +1,29 @@
+<#@ template language="C#v3.5" #>
+<#@ import namespace="System" #>
+<#@ import namespace="ObsTreeAnalyzer" #>
+<#
+    var project = new ObsProjectNode () {
+        BasePath = Environment.GetCommandLineArgs ()[1]
+    };
+
+    project.Load ();
+#>
+<html>
+<head>
+  <title>OBS Report for <#= project.Name #></title>
+</head>
+<body>
+  <table>
+    <tr><th>Links</th></tr>
+<#
+    foreach (var package in project.GetChildren (package => (package.GetChild<ObsLinkNode> ()) != null)) {
+        var link = package.GetChild<ObsLinkNode> ();
+#>
+    <tr>
+      <td><#= package.Name #></td>
+      <td><#= link #></td>
+    </tr>
+<# } #>
+  </table>
+</body>
+</html>
