@@ -14,19 +14,46 @@
   <title>OBS Report for <#= project.Name #></title>
 </head>
 <body>
+
+  <h2>Linked Packages</h2>
   <table>
-    <tr><th>Links</th></tr>
+    <tr>
+      <th>Package</th>
+      <th>Target Project</th>
+      <th>Base Revision</th>
+    </tr>
 <#
-    foreach (var package in from package in project
+    foreach (var package in
+        from package in project
         where package.Link != null
         orderby
             package.Link.TargetProjectName descending,
-            package.Link.TargetBaseRevision descending
+            package.Link.TargetBaseRevision descending,
+            package.Name
         select package) {
 #>
     <tr>
       <td><#= package.Name #></td>
-      <td><#= package.Link #></td>
+      <td><#= package.Link.TargetProjectName ?? "&lt;self&gt;" #></td>
+      <td><#= package.Link.TargetBaseRevision ?? "HEAD" #></td>
+    </tr>
+<# } #>
+  </table>
+
+  <h2>Owned Packages</h2>
+  <table>
+    <tr>
+      <th>Package</th>
+    </tr>
+<#
+    foreach (var package in
+        from package in project
+        where package.Link == null
+        orderby package.Name
+        select package) {
+#>
+    <tr>
+      <td><#= package.Name #></td>
     </tr>
 <# } #>
   </table>
