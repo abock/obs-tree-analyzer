@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 project="$1"
-dbfile="$project/tree.sqlite"
+report_file="$project/report.html"
 selfdir="$(dirname $0)"
 
 set -e
@@ -20,6 +20,6 @@ if ! test -d "$project" || ! test -d "$project/.osc"; then
 fi
 
 echo "Analyzing OBS tree..."
-mono --debug "$selfdir/obs-tree-analyzer.exe" "$project" "$dbfile"
+mono --debug "$selfdir/obs-tree-analyzer.exe" "$project" "$report_file"
 
 echo "Done."

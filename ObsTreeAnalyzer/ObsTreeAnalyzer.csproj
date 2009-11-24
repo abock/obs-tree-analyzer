@@ -8,7 +8,7 @@
     <ProjectGuid>{06116FBD-7C63-428F-9CA7-FB5726986AA7}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>ObsTreeAnalyzer</RootNamespace>
-    <AssemblyName>ObsTreeAnalyzer</AssemblyName>
+    <AssemblyName>obs-tree-analyzer</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|anycpu' ">
