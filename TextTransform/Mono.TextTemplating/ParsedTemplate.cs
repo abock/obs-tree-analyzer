@@ -168,10 +168,6 @@ namespace Mono.TextTemplating
 				LogError ("Unexpected attributes in include directive", includeDirective.StartLocation);
 				return;
 			}
-			if (!File.Exists (fileName)) {
-				LogError ("Included file '" + fileName + "' does not exist.", includeDirective.StartLocation);
-				return;
-			}
 			
 			string content, resolvedName;
 			if (host.LoadIncludeText (fileName, out content, out resolvedName))

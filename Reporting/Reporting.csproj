@@ -1,1 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?><Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  <PropertyGroup>    <ProductVersion>9.0.21022</ProductVersion>    <SchemaVersion>2.0</SchemaVersion>    <ProjectGuid>{D78BD7E1-5D2E-4D12-9BD7-0FA3DE5792B5}</ProjectGuid>  </PropertyGroup>  <ItemGroup>    <None Include="Report.tt" />  </ItemGroup></Project>
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D78BD7E1-5D2E-4D12-9BD7-0FA3DE5792B5}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Reporting</RootNamespace>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="Report.tt" />
+    <None Include="Style.css" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

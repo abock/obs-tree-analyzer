@@ -52,7 +52,7 @@ namespace Mono.TextTemplating
                 { "I=", "Paths to search for included files", s => generator.IncludePaths.Add (s) },
                 { "P=", "Paths to search for referenced assemblies", s => generator.ReferencePaths.Add (s) },
                 { "dp=", "Directive processor (name!class!assembly)", s => generator.DirectiveProcessors.Add (s) },
-                { "a=", "Key value pairs for directive processors (!!key!value)", s => {
+                { "a=", "Key value pairs for directive processors (key:value)", s => {
                     var parts = s.Split (new char [] { ':' }, 2);
                     if (parts == null || parts.Length < 2) {
                         throw new OptionException ("directive processor key value pairs must be specified as -a=key:value", "a");

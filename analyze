@@ -20,9 +20,11 @@ if ! test -d "$project" || ! test -d "$project/.osc"; then
 fi
 
 echo "Analyzing OBS tree..."
-mono --debug "$selfdir/text-transform.exe" -P="$selfdir" \
+mono --debug "$selfdir/text-transform.exe" \
+	-P="$selfdir" \
+	-I="$selfdir/Reporting" \
 	-a="obs-project-path:$project" \
-	-o report.html \
+	-o="$project/report.html" \
 	Reporting/Report.tt 
 
 echo "Done."

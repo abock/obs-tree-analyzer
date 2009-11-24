@@ -12,10 +12,12 @@
 #>
 <html>
 <head>
-  <title>OBS Report for <#= project.Name #></title>
+<title>OBS Report for <#= project.Name #></title>
+<style type="text/css">
+<#@ include file="Style.css" #>
+</style>
 </head>
 <body>
-
   <h2>Linked Packages</h2>
   <table>
     <tr>
