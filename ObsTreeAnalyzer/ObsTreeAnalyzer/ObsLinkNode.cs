@@ -33,6 +33,7 @@ namespace ObsTreeAnalyzer
         public string TargetProjectName { get; protected set; }
         public string TargetPackageName { get; protected set; }
         public string TargetBaseRevision { get; protected set; }
+        public string CommitCountAction { get; protected set; }
 
         public override void Load ()
         {
@@ -41,6 +42,7 @@ namespace ObsTreeAnalyzer
             TargetProjectName = XPathSelectSingle (xp, "/link/@project") ?? RootAncestor.Name;
             TargetPackageName = XPathSelectSingle (xp, "/link/@package") ?? Parent.Name;
             TargetBaseRevision = XPathSelectSingle (xp, "/link/@baserev");
+            CommitCountAction = XPathSelectSingle (xp, "/link/@cicount");
 
             if (TargetPackageName == Parent.Name) {
                 TargetPackageName = null;

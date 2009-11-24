@@ -25,6 +25,8 @@
 </script>
 </head>
 <body>
+  <h1>OBS Report for <#= project.Name #></h1>
+  <p>Generated at <#= DateTime.Now #>. <#= project.Children.Count #> total packages.</p>
   <h2>Linked Packages</h2>
   <table>
     <tr>
@@ -51,11 +53,20 @@
           : null #></td>
     </tr>
     <tr id="link-<#= to_css_id (package.Name) #>-details" class="details">
-      <td colspan="3">
+      <td colspan="4">
         <table>
+          <# if (package.Link.TargetBaseRevision != null) { #>
           <tr>
+            <th>Base Revision</th>
             <td><#= package.Link.TargetBaseRevision #></td>
           </tr>
+          <# } #>
+          <# if (package.Link.CommitCountAction != null) { #>
+          <tr>
+            <th>Commit Count</th>
+            <td><#= package.Link.CommitCountAction #></td>
+          </tr>
+          <# } #>
         </table>
       </td>
     </tr>

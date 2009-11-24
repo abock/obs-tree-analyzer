@@ -24,10 +24,24 @@ tr.details {
     display: none;
 }
 
+tr.details table {
+    padding: 1em;
+    font-size: 75%;
+}
+
+tr.details table th, tr.details table td {
+    background-color: transparent;
+    border: none !important;
+}
+
 tr.package {
     cursor: hand;
 }
 
 tr.package:hover {
-    background-color: #fc0;
+    background-color: #ddd;
+}
+
+.selected, .selected:hover {
+    background-color: #fc0 !important;
 }
