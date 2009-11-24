@@ -9,8 +9,8 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="Report.tt" />
-    <None Include="Style.css" />
+    <None Include="report.tt" />
+    <None Include="style.css" />
     <None Include="jquery-1.3.2.min.js" />
     <None Include="report.js" />
   </ItemGroup>

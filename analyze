@@ -25,6 +25,6 @@ mono --debug "$selfdir/text-transform.exe" \
 	-I="$selfdir/Reporting" \
 	-a="obs-project-path:$project" \
 	-o="$project/report.html" \
-	Reporting/Report.tt 
+	Reporting/report.tt
 
 echo "Done."
