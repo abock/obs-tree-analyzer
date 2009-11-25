@@ -6,7 +6,7 @@ $(ASSEMBLIES): $(SOURCES)
 
 run: $(ASSEMBLIES)
 	./analyze trees/Moblin\:Factory
-	gnome-open trees/Moblin\:Factory/report.html
+	firefox trees/Moblin\:Factory/report.html
 
 clean:
 	rm -f *.exe *.dll *.mdb

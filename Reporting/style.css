@@ -13,6 +13,10 @@ table * {
     text-align: left;
 }
 
+tr.package {
+    cursor: pointer;
+}
+
 th {
     background-color: #729fcf;
     padding: 3px 6px;
