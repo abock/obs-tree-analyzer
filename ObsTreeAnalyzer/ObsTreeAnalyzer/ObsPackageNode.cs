@@ -50,6 +50,16 @@ namespace ObsTreeAnalyzer
             get { return source_files; }
         }
 
+        public List<FileNode> AllFiles {
+            get {
+                var all = new List<FileNode> ();
+                SpecFiles.ForEach (file => all.Add (file));
+                SourceFiles.ForEach (file => all.Add (file));
+                PatchFiles.ForEach (file => all.Add (file));
+                return all;
+            }
+        }
+
         public override void Load ()
         {
             var xp = XPathLoadOsc ("_files");
@@ -81,6 +91,13 @@ namespace ObsTreeAnalyzer
                 var spec = child as SpecFileNode;
                 if (spec != null) {
                     SpecFiles.Add (spec);
+                    continue;
+                }
+
+                var patch = child as PatchFileNode;
+                if (patch != null) {
+                    PatchFiles.Add (patch);
+                    file.Load ();
                     continue;
                 }
 

@@ -2,6 +2,7 @@
 <#@ assembly name="ObsTreeAnalyzer" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 <#@ import namespace="ObsTreeAnalyzer" #>
 <#
@@ -32,14 +33,15 @@
   <h1>OBS Report for <#= project.Name #></h1>
   <p>Generated at <#= DateTime.Now #>. <#= project.Packages.Count #> total packages.</p>
   <h2>Linked Packages</h2>
-  <table class="tablesorter" id="linked-packages" cellspacing="0">
+  <p><a href="#" id="toggle-all-links">Toggle All</a></p>
+  <table class="grid tablesorter" id="linked-packages" cellspacing="0">
   <thead>
     <tr>
-      <th class="collapsible"></th>
+      <th></th>
       <th>Package</th>
       <th>Target Project</th>
-      <th>Target Package</th>
-      <th>Revisioned</th>
+      <th>&#120491;</th>
+      <th>Special</th>
     </tr>
   </thead>
   <tbody>
@@ -48,42 +50,121 @@
         from package in project.Packages
         where package.Link != null
         orderby
+            package.Link.ModificationCount descending,
             package.Link.TargetProjectName,
             package.Name
         select package) {
+
+        var applied_patches = (
+            from patch in package.PatchFiles
+            where patch.ApplicationIndex >= 0
+            select patch).ToList ();
+
+        var added_files = (
+            from file in package.AllFiles
+            where !(file is PatchFileNode) || ((PatchFileNode)file).ApplicationIndex < 0
+            select file).ToList ();
+
+        var deleted_files = package.Link.DeletedFiles;
+
+        var warnings = new List<string> ();
+        var special_summary = new List<string> ();
+
+        if (package.Link.TargetPackageName != null) special_summary.Add ("Target");
+        if (package.Link.CommitCountAction != null) special_summary.Add ("Cicount");
+        if (package.Link.TargetBaseRevision != null) special_summary.Add ("Base Revision");
+        if (package.Link.TargetPackageName == null && package.Link.TargetProjectName == package.Project.Name) {
+            special_summary.Add ("Circular");
+            warnings.Add ("This package links to itself (circular link)");
+        }
+
+        var has_metadata = special_summary.Count > 0;
+        var has_modifications = package.Link.ModificationCount > 0;
+        var collapsible =
+            warnings.Count > 0 ||
+            has_metadata ||
+            has_modifications;
 #>
-    <tr class="package">
-      <td class="collapsible" rowspan="2"></td>
+    <tr class="package<# if (collapsible) { #> collapsible<# } if (warnings.Count > 0) { #> warning<# } #>">
+      <td class="collapse-column<# if (collapsible) { #> collapsible<# } #>" rowspan="2"></td>
       <td><#= package.Name #></td>
       <td><#= package.Link.TargetProjectName #></td>
-      <td><#= package.Link.TargetPackageName #></td>
-      <td><#= package.Link.TargetBaseRevision != null
-          ? package.Link.TargetBaseRevision.Substring (0, 8)
-          : null #></td>
+      <td><#= package.Link.ModificationCount == 0 ? null : package.Link.ModificationCount.ToString () #></td>
+      <td><#= has_metadata ? String.Join (", ", special_summary.ToArray ()) : null #></td>
     </tr>
     <tr class="expand-child">
+      <# if (collapsible) { #>
       <td colspan="4">
-        <dl>
+        <# if (warnings.Count > 0) { #>
+        <table class="details">
+          <tr>
+            <th>Warnings</th>
+          </tr>
+          <tr>
+            <td>
+              <ul>
+              <# foreach (var warning in warnings) { #><li><#= warning #></li><# } #>
+              </ul>
+            </td>
+          </tr>
+        </table>
+        <# } #>
+        <# if (has_modifications) { #>
+        <table class="details">
+          <tr>
+            <# if (applied_patches.Count > 0) { #><th>Applied Patches</th><# } #>
+            <# if (added_files.Count > 0) { #><th>Added Files</th><# } #>
+            <# if (deleted_files.Count > 0) { #><th>Deleted Target Files</th><# } #>
+          </tr>
+          <tr>
+          <# foreach (var file_set in new System.Collections.IList [] { applied_patches, added_files, deleted_files }) { #>
+            <# if (file_set.Count > 0) { #>
+            <td>
+              <ul>
+              <# foreach (var file in file_set) { #>
+                <li><a href="<#= ((Node)file).BasePath #>"><#= ((Node)file).Name #></a></li>
+              <# } #>
+              </ul>
+            </td>
+            <# } #>
+          <# } #>
+          </tr>
+        </table>
+        <# } #>
+        <# if (has_metadata) { #>
+        <table class="details">
         <# if (package.Link.TargetBaseRevision != null) { #>
-          <dt>Base Revision</dt>
-          <dd><#= package.Link.TargetBaseRevision #></dd>
+          <tr>
+          <th>Target Base Revision</th>
+          <td><code><#= package.Link.TargetBaseRevision #></code></td>
+          </tr>
+        <# } #>
+        <# if (package.Link.TargetPackageName != null) { #>
+          <tr>
+          <th>Target Package</th>
+          <td><#= package.Link.TargetPackageName #></td>
+          </tr>
         <# } #>
         <# if (package.Link.CommitCountAction != null) { #>
-          <dt>Commit Count</dt>
-          <dd><#= package.Link.CommitCountAction #></dd>
+          <tr>
+          <th>Commit Count</th>
+          <td><#= package.Link.CommitCountAction #></td>
+          </tr>
         <# } #>
-        </dl>
+        </table>
+      <# } #>
       </td>
+      <# } #>
     </tr>
 <# } #>
   </tbody>
   </table>
 
   <h2>Owned Packages</h2>
-  <table class="tablesorter" id="owned-packages" cellspacing="0">
+  <table class="grid tablesorter" id="owned-packages" cellspacing="0">
   <thead>
     <tr>
-      <th class="collapsible"></th>
+      <th class="collapse-column"></th>
       <th>Package</th>
     </tr>
   </thead>
@@ -96,7 +177,7 @@
         select package) {
 #>
     <tr class="package">
-      <td class="collapsible" rowspan="2"></td>
+      <td class="collapsible collapse-column" rowspan="2"></td>
       <td><#= package.Name #></td>
     </tr>
     <tr class="expand-child">

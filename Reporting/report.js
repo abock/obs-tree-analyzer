@@ -11,4 +11,8 @@ $(document).ready (function () {
     $(".package").click (function () {
         $(this).children ("td.collapsible").children ("a").click ();
     });
+
+    $("#toggle-all-links").click (function () {
+        $("#linked-packages > tbody > tr > td.collapsible > a").click ();
+    });
 });

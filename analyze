@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 project="$1"
-report_file="$project/report.html"
 selfdir="$(dirname $0)"
 
 set -e
@@ -20,11 +19,16 @@ if ! test -d "$project" || ! test -d "$project/.osc"; then
 fi
 
 echo "Analyzing OBS tree..."
+report_path="${project##*/}-report.html"
+report_path="$(echo "$report_path" | \
+	tr '[:upper:]' '[:lower:]' | \
+	tr ':' '-')"
+
 mono --debug "$selfdir/text-transform.exe" \
 	-P="$selfdir" \
 	-I="$selfdir/Reporting" \
 	-a="obs-project-path:$project" \
-	-o="$project/report.html" \
+	-o="$report_path" \
 	Reporting/report.tt
 
 echo "Done."

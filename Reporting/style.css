@@ -4,70 +4,84 @@ body {
     color: #0e1c2c;
 }
 
-table {
-    border: 1px solid #3465a4 !important;
+code {
+    font-family: "DejaVu Sans Mono", monospace;
 }
 
-table * {
+a {
+    color: #132c50;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #729fcf;
+}
+
+/* Grid */
+
+table.grid {
+    border: 1px solid #3465a4 !important;
+    margin: 0;
+    padding: 0;
+}
+
+table.grid * {
     vertical-align: top;
     text-align: left;
 }
 
-tr.package {
-    cursor: pointer;
-}
-
-th {
+table.grid > thead > tr > th {
     background-color: #729fcf;
     padding: 3px 6px;
     margin-bottom: 1em;
     font-size: 1.25em;
 }
 
-td {
+table.grid > tbody > tr > td {
     padding: 3px 3em 3px 6px;
 }
 
-tr.odd {
+table.grid > tbody > tr.odd {
     background-color: #e5edf6;
 }
 
 /* Sorting */
 
-th.header {
+table.grid th.header {
     cursor: pointer;
 }
 
-th.headerSortUp {
+table.grid th.headerSortUp {
     background-color: #3465a4;
     color: #fff;
 }
 
-th.headerSortUp:after {
+table.grid th.headerSortUp:after {
     content: ' \25B4';
 }
 
-th.headerSortDown {
+table.grid th.headerSortDown {
     background-color: #3465a4;
     color: #fff;
 }
 
-th.headerSortDown:after {
+table.grid th.headerSortDown:after {
     content: ' \25BE';
 }
 
-/* Collapsing */
+/* Grid Collapsing */
 
 .collapsible {
-    margin: 0 !important;
-    padding: 0 !important;
+    cursor: pointer;
 }
 
-.collapsible {
+table.grid td.collapse-column {
+    margin: 0 !important;
+    padding: 0 !important;
     background-color: #3465a4;
 }
 
-.collapsible a {
+table.grid td.collapsible a {
     display: block;
     outline: 0;
     color: #bfd3e9;
@@ -76,10 +90,40 @@ th.headerSortDown:after {
     font-size: 1.5em;
 }
 
-.collapsible a.collapsed:after {
+table.grid .collapsible a.collapsed:after {
     content: '\25B8';
 }
 
-.collapsible a.expanded:after {
+table.grid .collapsible a.expanded:after {
     content: '\25BE';
+}
+
+.warning {
+    background-color: #f35656 !important;
+}
+
+/* Details Table */
+
+table.details {
+    margin: 1em 1em 2em 2em;
+    padding: 0;
+    font-size: 0.85em;
+}
+
+table.details td,
+table.details th {
+    padding-right: 2em;
+}
+
+/* Lists */
+
+table.grid ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+table.grid ul li {
+    margin: 0;
+    padding: 0;
 }

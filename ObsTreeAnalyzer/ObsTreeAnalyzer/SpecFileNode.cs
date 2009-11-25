@@ -34,6 +34,7 @@ namespace ObsTreeAnalyzer
 {
     public class SpecFileNode : FileNode
     {
+        public string SpecName { get; protected set; }
         public string Version { get; protected set; }
         public bool HasChangeLog { get; protected set; }
 
@@ -42,6 +43,8 @@ namespace ObsTreeAnalyzer
 
         public override void Load ()
         {
+            base.Load ();
+
             var patch_map = new Dictionary<string, PatchFileNode> ();
             var patch_application_count = 0;
             var processed_setup = false;
@@ -60,8 +63,8 @@ namespace ObsTreeAnalyzer
                         var field = match.Groups[1].Value.ToLower ();
                         var value = match.Groups[2].Value;
 
-                        if (!String.IsNullOrEmpty (Name)) {
-                            value = value.Replace ("%{name}", Name).Replace ("%name", Name);
+                        if (!String.IsNullOrEmpty (SpecName)) {
+                            value = value.Replace ("%{name}", SpecName).Replace ("%name", SpecName);
                         }
 
                         if (!String.IsNullOrEmpty (Version)) {
@@ -69,7 +72,7 @@ namespace ObsTreeAnalyzer
                         }
 
                         if (field == "name") {
-                            Name = value;
+                            SpecName = value;
                         } else if (field == "version") {
                             Version = value;
                         } else if (field == "changelog") {
@@ -122,8 +125,8 @@ namespace ObsTreeAnalyzer
 
         public override string ToString ()
         {
-            return String.Format ("{0} [Name={1}, Version={2}, AppliedPatches={3}, Sources={4}, HasChangeLog={5}]",
-                Path.GetFileName (BasePath), Name, Version, patches.Count, sources.Count, HasChangeLog);
+            return String.Format ("{0} [SpecName={1}, Version={2}, AppliedPatches={3}, Sources={4}, HasChangeLog={5}]",
+                Path.GetFileName (BasePath), SpecName, Version, patches.Count, sources.Count, HasChangeLog);
         }
     }
 }

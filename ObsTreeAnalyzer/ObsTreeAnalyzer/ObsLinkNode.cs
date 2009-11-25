@@ -25,6 +25,8 @@
 // THE SOFTWARE.
 
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ObsTreeAnalyzer
 {
@@ -37,6 +39,15 @@ namespace ObsTreeAnalyzer
         public string TargetBaseRevision { get; protected set; }
         public string CommitCountAction { get; protected set; }
 
+        private List<FileNode> deleted_files = new List<FileNode> ();
+        public List<FileNode> DeletedFiles {
+            get { return deleted_files; }
+        }
+
+        public int ModificationCount {
+            get { return DeletedFiles.Count + Package.AllFiles.Count; }
+        }
+
         public override void Load ()
         {
             Name = "_link";
@@ -48,6 +59,24 @@ namespace ObsTreeAnalyzer
 
             if (TargetPackageName == Package.Name) {
                 TargetPackageName = null;
+            }
+
+            var iter = xp.Select ("/link/patches/delete/@name");
+            while (iter.MoveNext ()) {
+                var file = new FileNode () { BasePath = iter.Current.Value };
+                file.Load ();
+                DeletedFiles.Add (file);
+            }
+
+            iter = xp.Select ("/link/patches/apply/@name");
+            int application_index = 0;
+            while (iter.MoveNext ()) {
+                var patch = (from p in Package.PatchFiles
+                    where p.Name == iter.Current.Value
+                    select p).FirstOrDefault ();
+                if (patch != null) {
+                    patch.ApplicationIndex = application_index++;
+                }
             }
         }
 
