@@ -31,6 +31,25 @@ namespace ObsTreeAnalyzer
 {
     public class ObsPackageNode : ObsXmlNode
     {
+        public ObsProjectNode Project { get; internal protected set; }
+
+        public ObsLinkNode Link { get; set; }
+
+        private List<SpecFileNode> spec_files = new List<SpecFileNode> ();
+        public List<SpecFileNode> SpecFiles {
+            get { return spec_files; }
+        }
+
+        private List<PatchFileNode> patch_files = new List<PatchFileNode> ();
+        public List<PatchFileNode> PatchFiles {
+            get { return patch_files; }
+        }
+
+        private List<FileNode> source_files = new List<FileNode> ();
+        public List<FileNode> SourceFiles {
+            get { return source_files; }
+        }
+
         public override void Load ()
         {
             var xp = XPathLoadOsc ("_files");
@@ -44,32 +63,37 @@ namespace ObsTreeAnalyzer
                     ? (Node)new ObsLinkNode () { BasePath = node_path }
                     : (Node)FileNode.Resolve (node_path);
 
-                child.Parent = this;
-                Children.Add (child);
-
                 // We will load these nodes after all other nodes
-                if (child is ObsLinkNode || child is SpecFileNode) {
+                var link = child as ObsLinkNode;
+                if (link != null) {
+                    link.Package = this;
+                    Link = link;
                     continue;
                 }
 
-                child.Load ();
+                var file = child as FileNode;
+                if (file == null) {
+                    continue;
+                }
+
+                file.Package = this;
+
+                var spec = child as SpecFileNode;
+                if (spec != null) {
+                    SpecFiles.Add (spec);
+                    continue;
+                }
+
+                SourceFiles.Add (file);
+                file.Load ();
             }
 
             // Always load the link and spec files last since they depend on other children
-            WithChildren<ObsLinkNode> (child => child.Load ());
-            WithChildren<SpecFileNode> (child => child.Load ());
-        }
+            if (Link != null) {
+                Link.Load ();
+            }
 
-        public ObsLinkNode Link {
-            get { return GetChild<ObsLinkNode> (); }
-        }
-
-        public IEnumerable<SpecFileNode> SpecFiles {
-            get { return GetChildren<SpecFileNode> (); }
-        }
-
-        public IEnumerable<PatchFileNode> PatchFiles {
-            get { return GetChildren<PatchFileNode> (); }
+            SpecFiles.ForEach (spec => spec.Load ());
         }
     }
 }

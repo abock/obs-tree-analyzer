@@ -26,6 +26,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -74,15 +75,21 @@ namespace ObsTreeAnalyzer
                         } else if (field == "changelog") {
                             in_changelog = true;
                         } else if (field.StartsWith ("patch")) {
-                            Parent.WithChild<PatchFileNode> (value, patch => {
+                            foreach (var patch in
+                                from patch in Package.PatchFiles
+                                where patch.Name == value
+                                select patch) {
                                 patch.ApplicationIndex = -1;
                                 patch_map.Add (field, patch);
-                            });
+                            };
                         } else if (field.StartsWith ("source")) {
-                            Parent.WithChild<FileNode> (value, source => {
+                            foreach (var source in
+                                from source in Package.SourceFiles
+                                where source.Name == value
+                                select source) {
                                 source.IsSpecSource = true;
                                 sources.Add (source);
-                            });
+                            }
                         } else {
                             in_changelog = false;
                         }

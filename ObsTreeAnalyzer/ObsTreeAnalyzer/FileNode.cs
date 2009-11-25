@@ -31,6 +31,8 @@ namespace ObsTreeAnalyzer
 {
     public class FileNode : Node
     {
+        public ObsPackageNode Package { get; internal protected set; }
+
         public bool IsSpecSource { get; internal protected set; }
 
         public override void Load ()

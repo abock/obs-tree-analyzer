@@ -30,6 +30,8 @@ namespace ObsTreeAnalyzer
 {
     public class ObsLinkNode : ObsXmlNode
     {
+        public ObsPackageNode Package { get; internal protected set; }
+
         public string TargetProjectName { get; protected set; }
         public string TargetPackageName { get; protected set; }
         public string TargetBaseRevision { get; protected set; }
@@ -39,12 +41,12 @@ namespace ObsTreeAnalyzer
         {
             Name = "_link";
             var xp = XPathLoad (BasePath);
-            TargetProjectName = XPathSelectSingle (xp, "/link/@project") ?? RootAncestor.Name;
-            TargetPackageName = XPathSelectSingle (xp, "/link/@package") ?? Parent.Name;
+            TargetProjectName = XPathSelectSingle (xp, "/link/@project") ?? Package.Project.Name;
+            TargetPackageName = XPathSelectSingle (xp, "/link/@package") ?? Package.Name;
             TargetBaseRevision = XPathSelectSingle (xp, "/link/@baserev");
             CommitCountAction = XPathSelectSingle (xp, "/link/@cicount");
 
-            if (TargetPackageName == Parent.Name) {
+            if (TargetPackageName == Package.Name) {
                 TargetPackageName = null;
             }
         }

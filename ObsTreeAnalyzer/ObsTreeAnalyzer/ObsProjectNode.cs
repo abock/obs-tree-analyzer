@@ -32,8 +32,13 @@ using System.Collections.Generic;
 
 namespace ObsTreeAnalyzer
 {
-    public class ObsProjectNode : ObsXmlNode, IEnumerable<ObsPackageNode>
+    public class ObsProjectNode : ObsXmlNode
     {
+        private List<ObsPackageNode> packages = new List<ObsPackageNode> ();
+        public List<ObsPackageNode> Packages {
+            get { return packages; }
+        }
+
         public override void Load ()
         {
             var xp = XPathLoadOsc ("_packages");
@@ -42,23 +47,11 @@ namespace ObsTreeAnalyzer
             while (iter.MoveNext ()) {
                 var package = new ObsPackageNode () {
                     BasePath = BuildPath (BasePath, iter.Current.Value),
-                    Parent = this
+                    Project = this
                 };
                 package.Load ();
-                Children.Add (package);
+                Packages.Add (package);
             }
-        }
-
-        public IEnumerator<ObsPackageNode> GetEnumerator ()
-        {
-            foreach (var child in GetChildren<ObsPackageNode> ()) {
-                yield return child;
-            }
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
-        {
-            return GetEnumerator ();
         }
     }
 }
