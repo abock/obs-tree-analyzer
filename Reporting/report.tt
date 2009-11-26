@@ -13,6 +13,24 @@
     };
 
     project.Load ();
+
+    var linked_packages = (
+        from package in project.Packages
+        where package.Link != null
+        orderby
+            package.Link.ModificationCount descending,
+            package.Link.TargetProjectName,
+            package.Name
+        select package).ToList ();
+
+    var owned_packages = (
+        from package in project.Packages
+        where package.Link == null
+        orderby
+            package.UnappliedPatchFiles.Count descending,
+            package.AppliedPatchFiles.Count descending,
+            package.Name
+        select package).ToList ();
 #>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -32,7 +50,7 @@
 <body>
   <h1>OBS Report for <#= project.Name #></h1>
   <p>Generated at <#= DateTime.Now #>. <#= project.Packages.Count #> total packages.</p>
-  <h2>Linked Packages</h2>
+  <h2>Linked Packages (<#= linked_packages.Count #>)</h2>
   <p><a href="#" id="toggle-all-links">Toggle All</a></p>
   <table class="grid tablesorter" id="linked-packages" cellspacing="0">
   <thead>
@@ -46,15 +64,7 @@
   </thead>
   <tbody>
 <#
-    foreach (var package in
-        from package in project.Packages
-        where package.Link != null
-        orderby
-            package.Link.ModificationCount descending,
-            package.Link.TargetProjectName,
-            package.Name
-        select package) {
-
+    foreach (var package in linked_packages) {
         var applied_patches = (
             from patch in package.PatchFiles
             where patch.ApplicationIndex >= 0
@@ -160,28 +170,58 @@
   </tbody>
   </table>
 
-  <h2>Owned Packages</h2>
+  <h2>Owned Packages (<#= owned_packages.Count #>)</h2>
   <table class="grid tablesorter" id="owned-packages" cellspacing="0">
   <thead>
     <tr>
+      <td colspan="3">&nbsp;</td>
+      <td colspan="3" style="text-align: center; font-style: italic">Patches</td>
+    </tr>
+    <tr>
       <th class="collapse-column"></th>
       <th>Package</th>
+      <th>Version</th>
+      <th>Total</th>
+      <th>Unapplied</th>
+      <th>Applied</th>
     </tr>
   </thead>
   <tbody>
 <#
-    foreach (var package in
-        from package in project.Packages
-        where package.Link == null
-        orderby package.Name
-        select package) {
+    foreach (var package in owned_packages) {
 #>
-    <tr class="package">
+    <tr class="package collapsible">
       <td class="collapsible collapse-column" rowspan="2"></td>
       <td><#= package.Name #></td>
+      <td><#= package.SpecFiles[0].Version #></td>
+      <td><#= package.PatchFiles.Count #></td>
+      <td><#= package.UnappliedPatchFiles.Count #></td>
+      <td><#= package.AppliedPatchFiles.Count #></td>
     </tr>
     <tr class="expand-child">
-      <td>Foo</td>
+      <td colspan="5">
+        <table class="details">
+          <tr>
+            <# if (package.UnappliedPatchFiles.Count > 0) { #><th>Unapplied Patches</th><# } #>
+            <# if (package.AppliedPatchFiles.Count > 0) { #><th>Applied Patches</th><# } #>
+          </tr>
+          <tr>
+          <# foreach (var file_set in new System.Collections.IList [] {
+                package.UnappliedPatchFiles,
+                package.AppliedPatchFiles }) { #>
+            <# if (file_set.Count > 0) { #>
+            <td>
+              <ul>
+              <# foreach (var file in file_set) { #>
+                <li><a href="<#= ((Node)file).BasePath #>"><#= ((Node)file).Name #></a></li>
+              <# } #>
+              </ul>
+            </td>
+            <# } #>
+          <# } #>
+          </tr>
+        </table>
+      </td>
     </tr>
 <# } #>
   </tbody>

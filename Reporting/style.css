@@ -30,11 +30,14 @@ table.grid * {
     text-align: left;
 }
 
-table.grid > thead > tr > th {
+table.grid > thead {
     background-color: #729fcf;
-    padding: 3px 6px;
     margin-bottom: 1em;
     font-size: 1.25em;
+}
+
+table.grid > thead > tr > * {
+    padding: 3px 6px;
 }
 
 table.grid > tbody > tr > td {

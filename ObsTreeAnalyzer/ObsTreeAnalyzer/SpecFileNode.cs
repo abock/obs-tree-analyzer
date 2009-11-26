@@ -60,7 +60,7 @@ namespace ObsTreeAnalyzer
 
                     var match = Regex.Match (line, @"^(\w+):\s*(.+)$");
                     if (match.Success) {
-                        var field = match.Groups[1].Value.ToLower ();
+                        var field = match.Groups[1].Value;
                         var value = match.Groups[2].Value;
 
                         if (!String.IsNullOrEmpty (SpecName)) {
@@ -71,21 +71,19 @@ namespace ObsTreeAnalyzer
                             value = value.Replace ("%{version}", Version).Replace ("%version", Version);
                         }
 
-                        if (field == "name") {
+                        if (field == "Name") {
                             SpecName = value;
-                        } else if (field == "version") {
+                        } else if (field == "Version" && Regex.IsMatch (value, @"^[0-9]")) {
                             Version = value;
-                        } else if (field == "changelog") {
-                            in_changelog = true;
-                        } else if (field.StartsWith ("patch")) {
+                        } else if (field.StartsWith ("Patch")) {
                             foreach (var patch in
                                 from patch in Package.PatchFiles
                                 where patch.Name == value
                                 select patch) {
                                 patch.ApplicationIndex = -1;
-                                patch_map.Add (field, patch);
+                                patch_map.Add (field.ToLower (), patch);
                             };
-                        } else if (field.StartsWith ("source")) {
+                        } else if (field.StartsWith ("Source")) {
                             foreach (var source in
                                 from source in Package.SourceFiles
                                 where source.Name == value
@@ -93,8 +91,6 @@ namespace ObsTreeAnalyzer
                                 source.IsSpecSource = true;
                                 sources.Add (source);
                             }
-                        } else {
-                            in_changelog = false;
                         }
 
                         continue;
@@ -111,8 +107,12 @@ namespace ObsTreeAnalyzer
                             patch_map.TryGetValue (directive, out patch)) {
                             patch.ApplicationIndex = patch_application_count++;
                             patches.Add (patch);
+                        } else if (directive == "changelog") {
+                            in_changelog = true;
+                            continue;
                         }
 
+                        in_changelog = false;
                         continue;
                     }
 

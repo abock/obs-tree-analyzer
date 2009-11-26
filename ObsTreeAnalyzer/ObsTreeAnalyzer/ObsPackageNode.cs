@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace ObsTreeAnalyzer
@@ -43,6 +44,14 @@ namespace ObsTreeAnalyzer
         private List<PatchFileNode> patch_files = new List<PatchFileNode> ();
         public List<PatchFileNode> PatchFiles {
             get { return patch_files; }
+        }
+
+        public List<PatchFileNode> AppliedPatchFiles {
+            get { return PatchFiles.FindAll (patch => patch.ApplicationIndex >= 0); }
+        }
+
+        public List<PatchFileNode> UnappliedPatchFiles {
+            get { return new List<PatchFileNode> (PatchFiles.Except (AppliedPatchFiles)); }
         }
 
         private List<FileNode> source_files = new List<FileNode> ();
