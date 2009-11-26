@@ -51,7 +51,7 @@
   <h1>OBS Report for <#= project.Name #></h1>
   <p>Generated at <#= DateTime.Now #>. <#= project.Packages.Count #> total packages.</p>
   <h2>Linked Packages (<#= linked_packages.Count #>)</h2>
-  <p><a href="#" id="toggle-all-links">Toggle All</a></p>
+  <p><a href="#toggle-all-links" id="toggle-all-links">Toggle All</a></p>
   <table class="grid tablesorter" id="linked-packages" cellspacing="0">
   <thead>
     <tr>
@@ -171,6 +171,7 @@
   </table>
 
   <h2>Owned Packages (<#= owned_packages.Count #>)</h2>
+  <p><a href="#toggle-all-owned" id="toggle-all-owned">Toggle All</a></p>
   <table class="grid tablesorter" id="owned-packages" cellspacing="0">
   <thead>
     <tr>

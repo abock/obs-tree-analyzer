@@ -15,4 +15,8 @@ $(document).ready (function () {
     $("#toggle-all-links").click (function () {
         $("#linked-packages > tbody > tr > td.collapsible > a").click ();
     });
+
+    $("#toggle-all-owned").click (function () {
+        $("#owned-packages > tbody > tr > td.collapsible > a").click ();
+    });
 });
