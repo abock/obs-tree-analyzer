@@ -14,6 +14,7 @@ for project in Moblin:Base Moblin:UI Moblin:Factory; do
 	rm -f "trees/$project/sync-lock"
 done
 
+echo "Rsyncing to $DEST..."
 rsync -avz --progress -e ssh --delete --delete-after \
 		--exclude=.osc/ \
 		trees/ \
