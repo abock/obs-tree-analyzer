@@ -118,6 +118,22 @@ table.details th {
     padding-right: 2em;
 }
 
+div.request-details {
+    display: block;
+    padding: 0.5em 1em 2em 0;
+    max-width: 40em;
+    font-style: italic;
+}
+
+div.request-details a {
+    color: #3465a4;
+    font-weight: bold;
+}
+
+div.request-details a:hover {
+    color: #729fcf;
+}
+
 /* Lists */
 
 table.grid ul {

@@ -19,4 +19,8 @@ $(document).ready (function () {
     $("#toggle-all-owned").click (function () {
         $("#owned-packages > tbody > tr > td.collapsible > a").click ();
     });
+
+    $("#toggle-all-requests").click (function () {
+        $("#requests > tbody > tr > td.collapsible > a").click ();
+    });
 });

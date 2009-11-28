@@ -26,9 +26,13 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.XPath;
+using System.Xml.Linq;
 using System.Collections.Generic;
+
+using OpenSuse.BuildService;
 
 namespace ObsTreeAnalyzer
 {
@@ -39,7 +43,18 @@ namespace ObsTreeAnalyzer
             get { return packages; }
         }
 
+        private List<ObsRequestNode> requests = new List<ObsRequestNode> ();
+        public List<ObsRequestNode> Requests {
+            get { return requests; }
+        }
+
         public override void Load ()
+        {
+            LoadPackages ();
+            LoadSubmitRequests ();
+        }
+
+        private void LoadPackages ()
         {
             var xp = XPathLoadOsc ("_packages");
             Name = xp.SelectSingleNode ("/project/@name").Value;
@@ -51,6 +66,27 @@ namespace ObsTreeAnalyzer
                 };
                 package.Load ();
                 Packages.Add (package);
+            }
+        }
+
+        private void LoadSubmitRequests ()
+        {
+            var accounts = new OscRcAccountCollection ();
+            var account = accounts.DefaultAccount;
+            using (var reader = new StreamReader (BuildPath (BasePath, ".osc", "_apiurl"))) {
+                account = accounts[reader.ReadToEnd ().Trim ()];
+            }
+
+            var doc = new XPathDocument (XmlReader.Create (account.ApiRequest.Get (
+                @"/search/request?match=" +
+                @"state/@name=""new"" and " +
+                @"action/target/@project=""" + Name + @""""
+            )));
+
+            var nav = doc.CreateNavigator ();
+            var iter = nav.Select ("/collection/request");
+            while (iter.MoveNext ()) {
+                Requests.Add (new ObsRequestNode (iter.Current));
             }
         }
     }

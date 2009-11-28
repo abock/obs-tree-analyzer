@@ -14,6 +14,19 @@
 
     project.Load ();
 
+    var requests = (
+        from request in project.Requests
+        where request.Action.Type == "submit" && request.State.Name == "new"
+        orderby request.State.When descending
+        select request).ToList ();
+    var show_request_source_package = false;
+    foreach (var request in requests) {
+        if (request.Action.Target.Package != request.Action.Source.Package) {
+            show_request_source_package = true;
+            break;
+        }
+    }
+
     var linked_packages = (
         from package in project.Packages
         where package.Link != null
@@ -50,6 +63,58 @@
 <body>
   <h1>OBS Report for <#= project.Name #></h1>
   <p>Generated at <#= DateTime.Now #>. <#= project.Packages.Count #> total packages.</p>
+
+<# if (requests.Count > 0) { #>
+  <h2>Requests (<#= requests.Count #>)</h2>
+  <p><a href="#toggle-all-requests" id="toggle-all-requests">Toggle All</a></p>
+  <table class="grid tablesorter" id="requests" cellspacing="0">
+  <thead>
+    <tr>
+      <th></th>
+      <th>ID</th>
+      <th>Package</th>
+      <th>Source Project</th>
+      <# if (show_request_source_package) { #><th>Source Package</th><# } #>
+      <th>Who</th>
+      <th>When</th>
+    </tr>
+  </thead>
+  <tbody>
+<#
+    foreach (var request in requests) {
+#>
+    <tr class="package collapsible">
+      <td class="collapse-column collapsible" rowspan="2"></td>
+      <td><#= request.ID #></td>
+      <td><#= request.Action.Target.Package #></td>
+      <td><#= request.Action.Source.Project #></td>
+      <# if (show_request_source_package) { #><td><#= request.Action.Source.Package #></td><# } #>
+      <td><#= request.State.Who #></td>
+      <td><#= request.State.When.ToString ("yyyy-MM-dd HH:mm") #></td>
+    </tr>
+    <tr class="expand-child">
+      <td colspan="<# if (show_request_source_package) { #>6<# } else { #>5<# } #>">
+        <div class="request-details">
+          <#= Regex.Replace (
+                request.Description,
+                @"(#|bnc\s*#?|bmo\s*#?|bgo\s*#?)\s*([0-9]{4,8})", match => {
+                    string bugzilla_url = null;
+                    switch (match.Groups[1].Value.Trim (new [] { '#', ' ', '\t', '\n', '\r' }).ToLower ()) {
+                        case "bgo": bugzilla_url = "https://bugzilla.gnome.org/show_bug.cgi?id="; break;
+                        case "bmo": bugzilla_url = "https://bugzilla.moblin.org/show_bug.cgi?id="; break;
+                        case "bnc":
+                        default:    bugzilla_url = "https://bugzilla.novell.com/show_bug.cgi?id="; break;
+                    }
+                    return String.Format ("<a href=\"{0}{1}\">{2}</a>", bugzilla_url, match.Groups[2].Value, match.Value);
+                }, RegexOptions.IgnoreCase) #>
+        </div>
+      </td>
+    </tr>
+<# } #>
+  </tbody>
+  </table>
+<# } #>
+
   <h2>Linked Packages (<#= linked_packages.Count #>)</h2>
   <p><a href="#toggle-all-links" id="toggle-all-links">Toggle All</a></p>
   <table class="grid tablesorter" id="linked-packages" cellspacing="0">
