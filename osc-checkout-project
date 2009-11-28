@@ -25,7 +25,7 @@ function checkout_or_update {
 	while test $ok -eq 0; do
 		if osc status "$prj_pac" &>/dev/null; then
 			pushd "$prj_pac" &>/dev/null
-			osc status | awk '{print$2}' | xargs rm -f
+			osc status | awk '{print$2}' | xargs rm -rf
 			osc up && ok=1
 			popd &>/dev/null
 		else
