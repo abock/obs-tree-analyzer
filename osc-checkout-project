@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+# Experimenting with comparing revisions instead of running osc up.
+# If revisions are out of sync, then osc up would run. Running a
+# raw HTTP API call is about 0.8s vs about 1.3s to do an osc up
+# when no change has been made remotely.
+#
+# osc api -m GET /source/Moblin:Factory/gssdp/_history | xpath "/revisionlist/revision[last()]/@rev=4 and /revisionlist/revision[last()]/@vrev=1 and /revisionlist/revision[last()]/srcmd5='e87a06b0287a1637ab28c055b880c4f5'"
+#
+
 function contains {
 	target=$1; shift
 	for __pkg in $@; do
