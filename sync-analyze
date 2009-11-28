@@ -6,7 +6,11 @@ UPDATE="$1"
 cd "$(dirname "$0")"
 
 for project in Moblin:Base Moblin:UI Moblin:Factory; do
-	./analyze trees "$project" "$UPDATE"
+	mkdir -p "trees/$project"
+	(
+		flock -x 200
+		./analyze trees "$project" "$UPDATE"
+	) 200>"trees/$project/sync-lock"
 done
 
 rsync -avz --progress -e ssh --delete --delete-after \

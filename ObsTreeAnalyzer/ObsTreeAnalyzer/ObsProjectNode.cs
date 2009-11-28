@@ -77,6 +77,9 @@ namespace ObsTreeAnalyzer
                 account = accounts[reader.ReadToEnd ().Trim ()];
             }
 
+            Console.WriteLine ("Checking for submit requests with OBS account:");
+            Console.WriteLine ("    {0}", account);
+
             var doc = new XPathDocument (XmlReader.Create (account.ApiRequest.Get (
                 @"/search/request?match=" +
                 @"state/@name=""new"" and " +
