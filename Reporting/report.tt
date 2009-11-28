@@ -14,6 +14,8 @@
 
     project.Load ();
 
+    var source_link_path = Host.ResolveParameterValue (null, null, "source-link-path");
+
     var requests = (
         from request in project.Requests
         where request.Action.Type == "submit" && request.State.Name == "new"
@@ -197,7 +199,7 @@
             <td>
               <ul>
               <# foreach (var file in file_set) { #>
-                <li><a href="<#= ((Node)file).BasePath #>"><#= ((Node)file).Name #></a></li>
+                <li><a href="<#= String.Format ("{0}/{1}/{2}/{3}", source_link_path, project.Name, package.Name, ((Node)file).Name) #>"><#= ((Node)file).Name #></a></li>
               <# } #>
               </ul>
             </td>
@@ -279,7 +281,7 @@
             <td>
               <ul>
               <# foreach (var file in file_set) { #>
-                <li><a href="<#= ((Node)file).BasePath #>"><#= ((Node)file).Name #></a></li>
+                <li><a href="<#= String.Format ("{0}/{1}/{2}/{3}", source_link_path, project.Name, package.Name, ((Node)file).Name) #>"><#= ((Node)file).Name #></a></li>
               <# } #>
               </ul>
             </td>

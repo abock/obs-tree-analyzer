@@ -37,7 +37,7 @@ PACKAGES="$(osc list "$project")"
 echo "Updating project checkout..."
 for package in $PACKAGES; do
 	echo "==> $package"
-#	checkout_or_update "$project" "$package"
+	checkout_or_update "$project" "$package"
 done
 
 echo "Removing obsolete packages..."

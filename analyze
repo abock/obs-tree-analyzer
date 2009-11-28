@@ -1,25 +1,40 @@
 #!/usr/bin/env bash
 
-project="$1"
-selfdir="$(dirname $0)"
+checkout_dir="$1"
+project="$2"
+update="$3"
+selfdir="$PWD/$(dirname $0)"
+
+if ! test "x$update" = "xno"; then
+	update=yes
+fi
 
 set -e
 
-if ! test "$#" -eq 1; then
-	echo "Usage: $0 <obs-project>"
+if ! test "$#" -ge 2; then
+	echo "Usage: $0 <checkout-root-dir> <obs-project> [<update>=yes|no]"
 	exit 1
 fi
 
-echo "Updating checkout of $project..."
-#"$selfdir/osc-checkout-project" "$project"
+if test "x$update" = "xno"; then
+	echo "Skipping update of checkout of $project..."
+else
+	echo "Updating checkout of $project..."
+	(
+		mkdir -p "$checkout_dir"
+		cd "$checkout_dir"
+		"$selfdir/osc-checkout-project" "$project"
+	)
+fi
 
-if ! test -d "$project" || ! test -d "$project/.osc"; then
+if ! test -d "$checkout_dir/$project" || \
+	! test -d "$checkout_dir/$project/.osc"; then
 	echo "$project is not a valid OBS checkout"
 	exit 1
 fi
 
 echo "Analyzing OBS tree..."
-report_path="${project##*/}-report.html"
+report_path="$checkout_dir/${project##*/}-report.html"
 report_path="$(echo "$report_path" | \
 	tr '[:upper:]' '[:lower:]' | \
 	tr ':' '-')"
@@ -27,8 +42,9 @@ report_path="$(echo "$report_path" | \
 mono --debug "$selfdir/text-transform.exe" \
 	-P="$selfdir" \
 	-I="$selfdir/Reporting" \
-	-a="obs-project-path:$project" \
+	-a="obs-project-path:$checkout_dir/$project" \
+	-a="source-link-path:." \
 	-o="$report_path" \
-	Reporting/report.tt
+	"$selfdir/Reporting/report.tt"
 
 echo "Done."

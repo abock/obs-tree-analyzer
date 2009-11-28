@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+DEST="moblin@moblin-build.suse.com:public_html/obs-status"
+UPDATE="$1"
+
+cd "$(dirname "$0")"
+
+for project in Moblin:Base Moblin:UI Moblin:Factory; do
+	./analyze trees "$project" "$UPDATE"
+done
+
+rsync -avz --progress -e ssh --delete --delete-after \
+		--exclude=.osc/ \
+		trees/ \
+		"$DEST"
