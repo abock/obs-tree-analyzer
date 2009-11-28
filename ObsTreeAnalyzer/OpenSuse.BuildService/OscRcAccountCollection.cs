@@ -27,6 +27,8 @@
 using System;
 using System.IO;
 
+using ICSharpCode.SharpZipLib.BZip2;
+
 namespace OpenSuse.BuildService
 {
     public class OscRcAccountCollection : AccountCollection
@@ -56,11 +58,33 @@ namespace OpenSuse.BuildService
                             switch (parts[0].Trim ()) {
                                 case "user": account.Username = parts[1].Trim (); break;
                                 case "pass": account.Password = parts[1].Trim (); break;
+                                case "passx":
+                                    var passx_decoded = PassxDecode (parts[1].Trim ());
+                                    if (passx_decoded != null) {
+                                        account.Password = passx_decoded;
+                                    }
+                                    break;
                             }
                         }
                     }
                 }
             }
+        }
+
+        private string PassxDecode (string passx)
+        {
+            using (var input = new MemoryStream ()) {
+                var passx_base64_decoded = Convert.FromBase64String (passx);
+                input.Write (passx_base64_decoded, 0, passx_base64_decoded.Length);
+                input.Seek (0, SeekOrigin.Begin);
+                using (var output = new BZip2InputStream (input)) {
+                    var passx_bzip2_decoded = new byte[1024];
+                    output.Read (passx_bzip2_decoded, 0, passx_bzip2_decoded.Length);
+                    return System.Text.Encoding.UTF8.GetString (passx_bzip2_decoded);
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -77,5 +78,20 @@ namespace OpenSuse.BuildService
         {
             return GetEnumerator ();
         }
+
+        public override string ToString ()
+        {
+            var builder = new StringBuilder ();
+            for (int i = 0; i < accounts.Count; i++) {
+                var account = this[i];
+                builder.AppendFormat ("{0} => {1}", i, account);
+                if (account == DefaultAccount) {
+                    builder.Append (" (default)");
+                }
+                builder.AppendLine ();
+            }
+            return builder.ToString ();
+        }
+
     }
 }
