@@ -37,6 +37,7 @@ namespace ObsTreeAnalyzer
         public string TargetProjectName { get; protected set; }
         public string TargetPackageName { get; protected set; }
         public string TargetBaseRevision { get; protected set; }
+        public string TargetRevision { get; protected set; }
         public string CommitCountAction { get; protected set; }
 
         private List<FileNode> deleted_files = new List<FileNode> ();
@@ -55,6 +56,7 @@ namespace ObsTreeAnalyzer
             TargetProjectName = XPathSelectSingle (xp, "/link/@project") ?? Package.Project.Name;
             TargetPackageName = XPathSelectSingle (xp, "/link/@package") ?? Package.Name;
             TargetBaseRevision = XPathSelectSingle (xp, "/link/@baserev");
+            TargetRevision = XPathSelectSingle (xp, "/link/@rev");
             CommitCountAction = XPathSelectSingle (xp, "/link/@cicount");
 
             if (TargetPackageName == Package.Name) {

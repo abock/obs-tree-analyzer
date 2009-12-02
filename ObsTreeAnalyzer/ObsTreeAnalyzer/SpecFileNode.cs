@@ -126,7 +126,6 @@ namespace ObsTreeAnalyzer
                 }
             }
 
-            Console.WriteLine ("Has: {0}: {1}", SpecName, Package.Project.UpstreamSourceList.ContainsKey (SpecName));
             Source upstream_source = null;
             if (SpecName != null && Package.Project.UpstreamSourceList != null &&
                 Package.Project.UpstreamSourceList.TryGetValue (SpecName, out upstream_source)) {
