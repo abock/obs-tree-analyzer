@@ -245,13 +245,14 @@
   <table class="grid tablesorter" id="owned-packages" cellspacing="0">
   <thead>
     <tr>
-      <td colspan="3">&nbsp;</td>
+      <td colspan="4">&nbsp;</td>
       <td colspan="3" style="text-align: center; font-style: italic">Patches</td>
     </tr>
     <tr>
       <th class="collapse-column"></th>
       <th>Package</th>
       <th>Version</th>
+      <th>Upstream</th>
       <th>Total</th>
       <th>Unapplied</th>
       <th>Applied</th>
@@ -265,12 +266,18 @@
       <td class="collapsible collapse-column" rowspan="2"></td>
       <td><#= package.Name #></td>
       <td><#= package.SpecFiles[0].Version #></td>
+      <td><#
+        var upstream = package.SpecFiles[0].UpstreamSource;
+        if (upstream != null) {
+      #>
+            <a href="<#= upstream.FetchUri #>" title="<#= upstream.FileName #>"><#= upstream.Version #></a>
+      <# } #></td>
       <td><#= package.PatchFiles.Count #></td>
       <td><#= package.UnappliedPatchFiles.Count #></td>
       <td><#= package.AppliedPatchFiles.Count #></td>
     </tr>
     <tr class="expand-child">
-      <td colspan="5">
+      <td colspan="6">
         <table class="details">
           <tr>
             <# if (package.UnappliedPatchFiles.Count > 0) { #><th>Unapplied Patches</th><# } #>

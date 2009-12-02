@@ -30,6 +30,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
+using UpstreamAnalyzer;
+
 namespace ObsTreeAnalyzer
 {
     public class SpecFileNode : FileNode
@@ -40,6 +42,8 @@ namespace ObsTreeAnalyzer
 
         private List<FileNode> sources = new List<FileNode> ();
         private List<PatchFileNode> patches = new List<PatchFileNode> ();
+
+        public Source UpstreamSource { get; protected set; }
 
         public override void Load ()
         {
@@ -120,6 +124,13 @@ namespace ObsTreeAnalyzer
                         HasChangeLog = true;
                     }
                 }
+            }
+
+            Console.WriteLine ("Has: {0}: {1}", SpecName, Package.Project.UpstreamSourceList.ContainsKey (SpecName));
+            Source upstream_source = null;
+            if (SpecName != null && Package.Project.UpstreamSourceList != null &&
+                Package.Project.UpstreamSourceList.TryGetValue (SpecName, out upstream_source)) {
+                UpstreamSource = upstream_source;
             }
         }
 

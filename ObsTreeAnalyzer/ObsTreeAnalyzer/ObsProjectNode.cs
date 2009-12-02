@@ -33,6 +33,7 @@ using System.Xml.Linq;
 using System.Collections.Generic;
 
 using OpenSuse.BuildService;
+using UpstreamAnalyzer;
 
 namespace ObsTreeAnalyzer
 {
@@ -48,8 +49,17 @@ namespace ObsTreeAnalyzer
             get { return requests; }
         }
 
+        public SourceList UpstreamSourceList { get; set; }
+
         public override void Load ()
         {
+            try {
+                UpstreamSourceList = new MoblinSourceRpmList ();
+                UpstreamSourceList.Load ();
+            } catch {
+                Console.WriteLine ("Could not fetch upstream source data");
+            }
+
             LoadPackages ();
             LoadSubmitRequests ();
         }

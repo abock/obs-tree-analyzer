@@ -38,6 +38,11 @@
     <Compile Include="OpenSuse.BuildService\ApiRequest.cs" />
     <Compile Include="OpenSuse.BuildService\OscRcAccountCollection.cs" />
     <Compile Include="ObsTreeAnalyzer\ObsRequestNode.cs" />
+    <Compile Include="UpstreamAnalyzer\MoblinSourceRpmList.cs" />
+    <Compile Include="UpstreamAnalyzer\Source.cs" />
+    <Compile Include="UpstreamAnalyzer\HtmlDirectoryList.cs" />
+    <Compile Include="UpstreamAnalyzer\HtmlDirectorySourceRpmList.cs" />
+    <Compile Include="UpstreamAnalyzer\SourceList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -49,5 +54,9 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UpstreamAnalyzer\" />
+    <Folder Include="System\" />
   </ItemGroup>
 </Project>
