@@ -26,13 +26,26 @@ function checkout_or_update {
 	local prj_pac="$1/$2"
 	local ok=0
 
+	# Forcefully try to check out/update a package until
+	# an osc up or co actually succeeds. This is necessary
+	# since often OBS will completely time out and will
+	# 'freeze' for minutes at a time
 	while test $ok -eq 0; do
 		if __osc status "$prj_pac" &>/dev/null; then
+			# Here we have a valid/uncorrupt checkout, so see
+			# if any changes have been made and remove them to
+			# ensure there will be no update conflict or invalid
+			# analysis - these trees should never be modified
 			pushd "$prj_pac" &>/dev/null
 			__osc status | awk '{print$2}' | xargs rm -rf
 			__osc up && ok=1
 			popd &>/dev/null
 		else
+			# Here something is wrong with the checkout itself,
+			# perhaps a previous osc run timed out and left
+			# invalid data (e.g. no .osc directory), or the
+			# package just has never been checked out, so
+			# remove it and try a fresh checkout
 			rm -rf "$prj_pac"
 			__osc co -u "$prj_pac" && ok=1
 		fi
@@ -52,8 +65,10 @@ for package in $PACKAGES; do
 	checkout_or_update "$project" "$package"
 done
 
+# We must take care to remove any obsolete/old packages that
+# might exist locally and are not longer in the remote project
+# since this is only done when running osc up for the project
 echo "Removing obsolete packages..."
-
 for package in $(find "$project" -maxdepth 1 -mindepth 1 -type d \
 	| cut -f2 -d\/ | grep -v .osc); do
 	if ! contains "$package" $PACKAGES; then
@@ -63,6 +78,10 @@ for package in $(find "$project" -maxdepth 1 -mindepth 1 -type d \
 	fi
 done
 
+# We must generate the local _package listing since it's
+# only created when osc up is run on the whole project.
+# The analysis tool uses the project's _packages file to
+# know which packages to analyze.
 echo "Generating project _packages file..."
 {
 echo "<project name=\"$(cat $project/.osc/_project)\">"
