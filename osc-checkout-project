@@ -18,19 +18,23 @@ function contains {
 	return 1
 }
 
+function __osc {
+	osc -A "${OBS_API_URL-https://api.opensuse.org}" $@
+}
+
 function checkout_or_update {
 	local prj_pac="$1/$2"
 	local ok=0
 
 	while test $ok -eq 0; do
-		if osc status "$prj_pac" &>/dev/null; then
+		if __osc status "$prj_pac" &>/dev/null; then
 			pushd "$prj_pac" &>/dev/null
-			osc status | awk '{print$2}' | xargs rm -rf
-			osc up && ok=1
+			__osc status | awk '{print$2}' | xargs rm -rf
+			__osc up && ok=1
 			popd &>/dev/null
 		else
 			rm -rf "$prj_pac"
-			osc co -u "$prj_pac" && ok=1
+			__osc co -u "$prj_pac" && ok=1
 		fi
 	done
 }
@@ -40,7 +44,7 @@ set -e
 project="$1"
 
 echo "Getting package list for $project..."
-PACKAGES="$(osc list "$project")"
+PACKAGES="$(__osc list "$project")"
 
 echo "Updating project checkout..."
 for package in $PACKAGES; do
