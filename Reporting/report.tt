@@ -40,11 +40,18 @@
 
     var owned_packages = (
         from package in project.Packages
-        where package.Link == null
+        where
+            package.Link == null &&
+            package.AllFiles.Count > 0
         orderby
             package.UnappliedPatchFiles.Count descending,
             package.AppliedPatchFiles.Count descending,
             package.Name
+        select package).ToList ();
+
+    var empty_packages = (
+        from package in project.Packages
+        where package.AllFiles.Count == 0
         select package).ToList ();
 #>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -312,5 +319,26 @@
   </tbody>
   </table>
 <# } #>
+
+<# if (empty_packages.Count > 0) { #>
+  <h2>Empty Packages (<#= empty_packages.Count #>)</h2>
+  <table class="grid tablesorter" id="empty-packages" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Package</th>
+    </tr>
+  </thead>
+  <tbody>
+<#
+    foreach (var package in empty_packages) {
+#>
+    <tr class="package">
+      <td><#= package.Name #></td>
+    </tr>
+<# } #>
+  </tbody>
+  </table>
+<# } #>
+
 </body>
 </html>
