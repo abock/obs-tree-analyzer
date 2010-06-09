@@ -61,7 +61,7 @@ namespace ObsTreeAnalyzer
             }
 
             LoadPackages ();
-            LoadSubmitRequests ();
+            // LoadSubmitRequests ();
         }
 
         private void LoadPackages ()
