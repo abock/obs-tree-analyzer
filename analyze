@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+api="https://api.opensuse.org"
+if test "$1" = "-A"; then
+	api="$2"
+	shift; shift
+fi
 checkout_dir="$1"
 project="$2"
 update="$3"
@@ -12,7 +17,7 @@ fi
 set -e
 
 if ! test "$#" -ge 2; then
-	echo "Usage: $0 <checkout-root-dir> <obs-project> [<update>=yes|no]"
+	echo "Usage: $0 [-A API_URL] <checkout-root-dir> <obs-project> [<update>=yes|no]"
 	exit 1
 fi
 
@@ -23,7 +28,7 @@ else
 	(
 		mkdir -p "$checkout_dir"
 		cd "$checkout_dir"
-		"$selfdir/osc-checkout-project" "$project"
+		"$selfdir/osc-checkout-project" -A "$api" "$project"
 	)
 fi
 

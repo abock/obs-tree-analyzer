@@ -31,14 +31,14 @@ function checkout_or_update {
 	# since often OBS will completely time out and will
 	# 'freeze' for minutes at a time
 	while test $ok -eq 0; do
-		if __osc status "$prj_pac" &>/dev/null; then
+		if osc -A "$api" status "$prj_pac" &>/dev/null; then
 			# Here we have a valid/uncorrupt checkout, so see
 			# if any changes have been made and remove them to
 			# ensure there will be no update conflict or invalid
 			# analysis - these trees should never be modified
 			pushd "$prj_pac" &>/dev/null
-			__osc status | awk '{print$2}' | xargs rm -rf
-			__osc up && ok=1
+			osc -A "$api" status | awk '{print$2}' | xargs rm -rf
+			osc -A "$api" up && ok=1
 			popd &>/dev/null
 		else
 			# Here something is wrong with the checkout itself,
@@ -47,17 +47,22 @@ function checkout_or_update {
 			# package just has never been checked out, so
 			# remove it and try a fresh checkout
 			rm -rf "$prj_pac"
-			__osc co -u "$prj_pac" && ok=1
+			osc -A "$api" co -u "$prj_pac" && ok=1
 		fi
 	done
 }
 
 set -e
 
+api="https://api.opensuse.org"
+if test "$1" = "-A"; then
+	api="$2"
+	shift; shift
+fi
 project="$1"
 
 echo "Getting package list for $project..."
-PACKAGES="$(__osc list "$project")"
+PACKAGES="$(osc -A "$api" list "$project")"
 
 echo "Updating project checkout..."
 for package in $PACKAGES; do
