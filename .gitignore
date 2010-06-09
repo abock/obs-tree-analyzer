@@ -1,4 +1,5 @@
 trees/
+obj/
 *.exe
 *.dll
 *.mdb
