@@ -2,7 +2,7 @@ ASSEMBLIES = text-transform.exe ObsTreeAnalyzer.dll
 SOURCES = $(shell find ObsTreeAnalyzer TextTransform)
 
 $(ASSEMBLIES): $(SOURCES)
-	mdtool build ObsTreeAnalyzer.sln
+	xbuild ObsTreeAnalyzer.sln
 
 run: $(ASSEMBLIES)
 	./analyze trees/Moblin\:Factory
