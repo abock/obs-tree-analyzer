@@ -40,8 +40,13 @@ namespace ObsTreeAnalyzer
         
         protected XPathNavigator XPathLoad (string path, params string [] extraPath)
         {
-            using (var stream = new FileStream (BuildPath (path, extraPath), FileMode.Open, FileAccess.Read)) {
-                return new XPathDocument (stream).CreateNavigator ();
+            try {
+                using (var stream = new FileStream (BuildPath (path, extraPath), FileMode.Open, FileAccess.Read)) {
+                    return new XPathDocument (stream).CreateNavigator ();
+                }
+            } catch (Exception e) {
+                Console.WriteLine ("Failed to parse: {0}", path);
+                throw e;
             }
         }
 
